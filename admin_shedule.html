@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-500">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schedules | TechlyCare Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            tc: { 
+              DEFAULT: '#0ea5a9', 
+              50: '#f0fdfa', 
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              500: '#0ea5a9',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a'
+            }
+          },
+          fontFamily: { 
+            sans: ['Inter','ui-sans-serif','system-ui'],
+            serif: ['Playfair Display', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.7s forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .enhanced-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    }
+    
+    .enhanced-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+    }
+    
+    .enhanced-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px rgba(14, 165, 169, 0.15);
+    }
+    
+    .dark .enhanced-card {
+      background: linear-gradient(145deg, #1e293b 0%, #0f1724 100%);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .btn-premium {
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 100%);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .btn-premium::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.7s ease;
+    }
+    .btn-premium:hover::before {
+      left: 100%;
+    }
+    .btn-premium:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(14,165,169,0.3);
+    }
+    
+    .elegant-underline {
+      position: relative;
+    }
+    .elegant-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+      border-radius: 2px;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.85);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .dark .glass-effect {
+      background: rgba(15, 23, 36, 0.85);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .sidebar {
+      background: linear-gradient(180deg, #0ea5a9 0%, #0d9488 100%);
+    }
+    
+    .dark .sidebar {
+      background: linear-gradient(180deg, #0f766e 0%, #115e59 100%);
+    }
+    
+    .avatar-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 100%);
+      color: white;
+      font-weight: bold;
+    }
+    
+    .progress-container {
+      background-color: #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 10px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+      border-radius: 10px;
+      transition: width 1s ease-in-out;
+    }
+    
+    .dark .progress-container {
+      background-color: #374151;
+    }
+    
+    .stat-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 35px rgba(14, 165, 169, 0.15);
+    }
+    
+    .dark .stat-card {
+      background: linear-gradient(145deg, #1e293b 0%, #0f1724 100%);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .icon-container {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card:hover .icon-container {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .table-row {
+      transition: all 0.3s ease;
+    }
+    
+    .table-row:hover {
+      background-color: rgba(14, 165, 169, 0.05);
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .status-scheduled {
+      background-color: rgba(34, 197, 94, 0.1);
+      color: rgb(21, 128, 61);
+    }
+    
+    .status-in-progress {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: rgb(180, 83, 9);
+    }
+    
+    .status-completed {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: rgb(29, 78, 216);
+    }
+    
+    .status-cancelled {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: rgb(185, 28, 28);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 600px;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+    
+    .dark .modal-content {
+      background: #1e293b;
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .dark .modal-header {
+      border-bottom: 1px solid #374151;
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    .dark .modal-footer {
+      border-top: 1px solid #374151;
+    }
+    
+    .calendar-day {
+      min-height: 120px;
+      border: 1px solid #e5e7eb;
+      transition: all 0.3s ease;
+    }
+    
+    .dark .calendar-day {
+      border-color: #374151;
+    }
+    
+    .calendar-day:hover {
+      background-color: rgba(14, 165, 169, 0.05);
+    }
+    
+    .calendar-day.today {
+      background-color: rgba(14, 165, 169, 0.1);
+      border-color: #0ea5a9;
+    }
+    
+    .schedule-item {
+      padding: 4px 8px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .schedule-item:hover {
+      transform: translateX(4px);
+    }
+    
+    .schedule-morning {
+      background-color: rgba(34, 197, 94, 0.1);
+      border-left: 3px solid #16a34a;
+    }
+    
+    .schedule-evening {
+      background-color: rgba(59, 130, 246, 0.1);
+      border-left: 3px solid #2563eb;
+    }
+    
+    .schedule-therapy {
+      background-color: rgba(168, 85, 247, 0.1);
+      border-left: 3px solid #7c3aed;
+    }
+    
+    .schedule-medication {
+      background-color: rgba(245, 158, 11, 0.1);
+      border-left: 3px solid #d97706;
+    }
+    
+    .schedule-meal {
+      background-color: rgba(239, 68, 68, 0.1);
+      border-left: 3px solid #dc2626;
+    }
+    
+    .filter-section {
+      transition: all 0.3s ease;
+      max-height: 0;
+      overflow: hidden;
+    }
+    
+    .filter-section.active {
+      max-height: 500px;
+    }
+    
+    .view-toggle {
+      display: flex;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .dark .view-toggle {
+      border-color: #374151;
+    }
+    
+    .view-toggle button {
+      padding: 8px 16px;
+      background: white;
+      border: none;
+      transition: all 0.3s ease;
+    }
+    
+    .dark .view-toggle button {
+      background: #1e293b;
+      color: #e5e7eb;
+    }
+    
+    .view-toggle button.active {
+      background: #0ea5a9;
+      color: white;
+    }
+    
+    .dark .view-toggle button.active {
+      background: #0ea5a9;
+    }
+
+    /* Mobile responsive styles */
+    @media (max-width: 1023px) {
+      .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        height: 100%;
+        z-index: 50;
+        transition: left 0.3s ease;
+        width: 280px;
+      }
+      
+      .sidebar.active {
+        left: 0;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .main-content {
+        width: 100%;
+      }
+      
+      .page-title {
+        text-align: center;
+        width: 100%;
+      }
+      
+      .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        display: none;
+      }
+      
+      .mobile-menu-overlay.active {
+        display: block;
+      }
+      
+      /* Improved mobile top navbar */
+      .top-navbar-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.5rem 0;
+      }
+      
+      .mobile-header-content {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+      }
+      
+      .mobile-title-container {
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+      }
+      
+      .mobile-title-container h1 {
+        font-size: 1.5rem;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0 auto;
+      }
+      
+      .mobile-title-container p {
+        font-size: 0.875rem;
+        line-height: 1.2;
+      }
+      
+      .mobile-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .mobile-profile-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Mobile calendar adjustments */
+      .calendar-day {
+        min-height: 80px;
+        padding: 0.25rem;
+      }
+      
+      .schedule-item {
+        font-size: 0.65rem;
+        padding: 2px 4px;
+      }
+      
+      .calendar-grid-mobile {
+        font-size: 0.75rem;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .mobile-title-container h1 {
+        font-size: 1.25rem;
+      }
+      
+      .mobile-title-container p {
+        font-size: 0.75rem;
+      }
+      
+      .calendar-day {
+        min-height: 60px;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .sidebar {
+        position: static;
+      }
+      
+      .mobile-menu-btn {
+        display: none;
+      }
+      
+      .mobile-menu-overlay {
+        display: none;
+      }
+      
+      .top-navbar-mobile {
+        display: none;
+      }
+    }
+
+    /* Logout modal styles */
+    .logout-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .logout-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .logout-modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 400px;
+      width: 90%;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dark .logout-modal-content {
+      background: #1e293b;
+    }
+    
+    .logout-modal.active .logout-modal-content {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans transition-colors duration-500">
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="logout-modal" id="logout-modal">
+    <div class="logout-modal-content">
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
+          <i class="fas fa-sign-out-alt text-red-500 text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">Logout</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Are you sure you want to log out?</p>
+        <div class="flex space-x-4">
+          <button class="flex-1 py-2 rounded-lg border border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" id="cancel-logout">
+            Cancel
+          </button>
+          <button class="flex-1 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors" id="confirm-logout">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="flex h-screen">
+    <aside class="w-64 sidebar text-white flex flex-col transition-colors duration-500" id="sidebar">
+      <div class="p-6 text-2xl font-bold flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21s-6.7-5.2-9.3-9.6C.8 8.4 2.2 3.9 6 3.1c2.2-.5 3.8 1 4.8 2.4 1-1.4 2.6-2.9 4.8-2.4 3.8.8 5.2 5.3 3.3 8.3C18.7 15.8 12 21 12 21z"/>
+          </svg>
+          <span>TechlyCare</span>
+        </div>
+        <button class="lg:hidden text-white" id="close-sidebar" title="Close sidebar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="flex-1 px-4 py-2">
+        <ul>
+          <li class="my-2"><a href="admindash.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-tachometer-alt w-5 text-center"></i> Dashboard</a></li>
+          <li class="my-2"><a href="admin_subcribe.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-users w-5 text-center"></i> Subscribers</a></li>
+          <li class="my-2"><a href="admin_shedule.html" class="block px-4 py-3 rounded-lg bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-calendar-alt w-5 text-center"></i> Schedules</a></li>
+          <li class="my-2"><a href="admin_plan.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-crown w-5 text-center"></i> Plans</a></li>
+          <li class="my-2"><a href="admin_analysic.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-chart-bar w-5 text-center"></i> Analytics</a></li>
+          <li class="my-2"><a href="admin_setting.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-cog w-5 text-center"></i> Settings</a></li>
+        </ul>
+      </nav>
+      <div class="p-6 border-t border-white/20">
+        <div class="flex items-center space-x-3 mb-4">
+          <!-- Profile Image with Fallback -->
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+               alt="User" 
+               class="rounded-full border-2 border-white w-10 h-10 object-cover"
+               onerror="this.style.display='none'; document.getElementById('avatar-fallback').style.display='flex';">
+          
+          <!-- Fallback avatar with initials -->
+          <div id="avatar-fallback" class="avatar-placeholder rounded-full border-2 border-white w-10 h-10 hidden">
+            AD
+          </div>
+          
+          <div>
+            <span class="font-medium">Admin User</span>
+            <p class="text-xs text-white/70">Administrator</p>
+          </div>
+        </div>
+        <!-- Logout Button in Sidebar -->
+        <button id="logout-btn-sidebar" class="w-full mt-4 px-4 py-3 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-300 flex items-center gap-3 text-white">
+          <i class="fas fa-sign-out-alt w-5 text-center"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-4 lg:p-6 overflow-auto main-content">
+
+      <!-- Mobile Top Navbar -->
+      <div class="lg:hidden mb-6 top-navbar-mobile">
+        <div class="mobile-header-content">
+          <button class="mobile-menu-btn mr-3 glass-effect p-2 rounded-lg text-gray-800 dark:text-gray-100" id="open-sidebar" title="Open sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="mobile-title-container">
+            <h1 class="font-bold font-serif text-gray-800 dark:text-gray-100 elegant-underline">Schedules</h1>
+            <p class="text-gray-600 dark:text-gray-400">Manage care schedules & appointments</p>
+          </div>
+          <div class="mobile-actions">
+            <!-- Dark Mode Toggle in Mobile -->
+            <button id="theme-toggle-mobile" class="glass-effect p-2 rounded-lg transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">
+              🌙
+            </button>
+            
+            <!-- Notification Bell in Mobile -->
+            <button class="relative glass-effect p-2 rounded-lg transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+              </svg>
+              <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">3</span>
+            </button>
+            
+            <!-- Profile image in mobile navbar -->
+            <div class="mobile-profile-container">
+              <div class="relative">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+                     alt="User" 
+                     class="rounded-full border-2 border-tc w-8 h-8 object-cover"
+                     onerror="this.style.display='none'; document.getElementById('mobile-navbar-avatar-fallback').style.display='flex';">
+                <div id="mobile-navbar-avatar-fallback" class="avatar-placeholder rounded-full border-2 border-tc w-8 h-8 hidden text-xs">
+                  AD
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Top Navbar -->
+      <div class="hidden lg:flex justify-between items-center mb-8">
+        <div class="flex items-center">
+          <button class="mobile-menu-btn mr-4 glass-effect p-3 rounded-xl transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100 lg:hidden" id="open-sidebar-desktop" title="Open sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="page-title">
+            <h1 class="text-3xl font-bold font-serif text-gray-800 dark:text-gray-100 elegant-underline inline-block">Schedules</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Manage care schedules, staff assignments, and appointments</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button id="theme-toggle" class="glass-effect p-3 rounded-xl transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">🌙</button>
+          <button class="relative glass-effect p-3 rounded-xl transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">3</span>
+          </button>
+          <div class="flex items-center space-x-3 glass-effect p-2 rounded-xl">
+            <!-- Profile image in top navbar with fallback -->
+            <div class="relative">
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+                   alt="User" 
+                   class="rounded-full border-2 border-tc w-10 h-10 object-cover"
+                   onerror="this.style.display='none'; document.getElementById('navbar-avatar-fallback').style.display='flex';">
+              <div id="navbar-avatar-fallback" class="avatar-placeholder rounded-full border-2 border-tc w-10 h-10 hidden">
+                AD
+              </div>
+            </div>
+            <div class="hidden md:block">
+              <p class="font-medium text-gray-800 dark:text-gray-100">Admin User</p>
+              <p class="text-xs text-gray-600 dark:text-gray-400">Administrator</p>
+            </div>
+            <!-- Logout Button in Top Navbar (Mobile) -->
+            <button id="logout-btn-navbar" class="md:hidden text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors" title="Logout">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Overview -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
+        <div class="stat-card fade-in">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Today's Schedules</p>
+              <h3 class="text-xl lg:text-2xl font-bold mt-1 text-gray-800 dark:text-gray-100">24</h3>
+            </div>
+            <div class="icon-container bg-tc/10 text-tc">
+              <i class="fas fa-calendar-day text-lg lg:text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm text-green-500">
+            <i class="fas fa-arrow-up mr-1"></i>
+            <span>+5 from yesterday</span>
+          </div>
+        </div>
+        
+        <div class="stat-card fade-in">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Completed Today</p>
+              <h3 class="text-xl lg:text-2xl font-bold mt-1 text-gray-800 dark:text-gray-100">18</h3>
+            </div>
+            <div class="icon-container bg-green-500/10 text-green-500">
+              <i class="fas fa-check-circle text-lg lg:text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm text-green-500">
+            <i class="fas fa-check mr-1"></i>
+            <span>75% completion rate</span>
+          </div>
+        </div>
+        
+        <div class="stat-card fade-in">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Staff On Duty</p>
+              <h3 class="text-xl lg:text-2xl font-bold mt-1 text-gray-800 dark:text-gray-100">12</h3>
+            </div>
+            <div class="icon-container bg-blue-500/10 text-blue-500">
+              <i class="fas fa-user-md text-lg lg:text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm text-amber-500">
+            <i class="fas fa-exclamation-circle mr-1"></i>
+            <span>2 staff on leave</span>
+          </div>
+        </div>
+        
+        <div class="stat-card fade-in">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Upcoming Appointments</p>
+              <h3 class="text-xl lg:text-2xl font-bold mt-1 text-gray-800 dark:text-gray-100">7</h3>
+            </div>
+            <div class="icon-container bg-amber-500/10 text-amber-500">
+              <i class="fas fa-clock text-lg lg:text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm text-amber-500">
+            <i class="fas fa-clock mr-1"></i>
+            <span>Next: Therapy in 2 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Bar -->
+      <div class="enhanced-card p-4 lg:p-6 mb-4 lg:mb-6 fade-in">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex flex-wrap gap-2">
+            <button class="btn-premium px-3 lg:px-4 py-2 rounded-lg text-white font-medium flex items-center gap-2 text-sm lg:text-base" id="add-schedule">
+              <i class="fas fa-plus"></i>
+              <span>Add Schedule</span>
+            </button>
+            <button class="px-3 lg:px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300 text-sm lg:text-base" id="toggle-filters">
+              <i class="fas fa-filter"></i>
+              <span>Filters</span>
+            </button>
+            <button class="px-3 lg:px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300 text-sm lg:text-base" id="print-schedule">
+              <i class="fas fa-print"></i>
+              <span>Print</span>
+            </button>
+          </div>
+          <div class="flex items-center space-x-2 lg:space-x-4">
+            <div class="view-toggle">
+              <button class="active text-sm lg:text-base" data-view="calendar">
+                <i class="fas fa-calendar-alt mr-1 lg:mr-2"></i>
+                <span class="hidden sm:inline">Calendar</span>
+              </button>
+              <button class="text-sm lg:text-base" data-view="list">
+                <i class="fas fa-list mr-1 lg:mr-2"></i>
+                <span class="hidden sm:inline">List</span>
+              </button>
+            </div>
+            <div class="flex items-center space-x-2">
+              <div class="relative">
+                <input type="text" placeholder="Search schedules..." class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 w-full md:w-48 lg:w-64 text-sm lg:text-base">
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advanced Filters -->
+        <div class="filter-section mt-4 pt-4 border-t border-gray-200 dark:border-gray-700" id="filters-section">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Schedule Type</label>
+              <select class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base">
+                <option value="">All Types</option>
+                <option value="morning">Morning Care</option>
+                <option value="evening">Evening Care</option>
+                <option value="therapy">Therapy Session</option>
+                <option value="medication">Medication</option>
+                <option value="meal">Meal Service</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Staff Member</label>
+              <select class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base">
+                <option value="">All Staff</option>
+                <option value="nurse-jane">Nurse Jane</option>
+                <option value="dr-smith">Dr. Smith</option>
+                <option value="caregiver-mike">Caregiver Mike</option>
+                <option value="therapist-anna">Therapist Anna</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+              <select class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base">
+                <option value="">All Statuses</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date Range</label>
+              <select class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base">
+                <option value="today">Today</option>
+                <option value="week" selected>This Week</option>
+                <option value="month">This Month</option>
+                <option value="custom">Custom Range</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex justify-end mt-4">
+            <button class="px-3 lg:px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300 mr-2 text-sm lg:text-base">
+              Reset
+            </button>
+            <button class="px-3 lg:px-4 py-2 rounded-lg btn-premium text-white font-medium text-sm lg:text-base">
+              Apply Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar View -->
+      <div class="enhanced-card p-4 lg:p-6 fade-in" id="calendar-view">
+        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-4 lg:mb-6 gap-4">
+          <h2 class="text-xl font-semibold font-serif text-gray-800 dark:text-gray-100">January 2025</h2>
+          <div class="flex items-center space-x-2 lg:space-x-4">
+            <button class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="px-3 lg:px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300 text-sm lg:text-base">
+              Today
+            </button>
+            <button class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Calendar Header -->
+        <div class="grid grid-cols-7 gap-1 mb-2 calendar-grid-mobile">
+          <div class="text-center font-medium text-gray-600 dark:text-gray-400 py-2 text-sm lg:text-base">Sun</div>
+          <div class="text-center font-medium text-gray-600 dark:text-gray-400 py-2 text-sm lg:text-base">Mon</div>
+          <div class="text-center font-medium text-gray-600 dark:text-gray-400 py-2 text-sm lg:text-base">Tue</div>
+          <div class="text-center font-medium text-gray-600 dark:text-gray-400 py-2 text-sm lg:text-base">Wed</div>
+          <div class="text-center font-medium text-gray-600 dark:text-gray-400 py-2 text-sm lg:text-base">Thu</div>
+          <div class="text-center font-medium text-gray-600 dark:text-gray-400 py-2 text-sm lg:text-base">Fri</div>
+          <div class="text-center font-medium text-gray-600 dark:text-gray-400 py-2 text-sm lg:text-base">Sat</div>
+        </div>
+        
+        <!-- Calendar Grid -->
+        <div class="grid grid-cols-7 gap-1">
+          <!-- Empty days (December) -->
+          <div class="calendar-day p-2 bg-gray-50 dark:bg-gray-800 text-gray-400">
+            <div class="text-sm font-medium">29</div>
+          </div>
+          <div class="calendar-day p-2 bg-gray-50 dark:bg-gray-800 text-gray-400">
+            <div class="text-sm font-medium">30</div>
+          </div>
+          <div class="calendar-day p-2 bg-gray-50 dark:bg-gray-800 text-gray-400">
+            <div class="text-sm font-medium">31</div>
+          </div>
+          
+          <!-- January Days -->
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">1</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">2</div>
+            <div class="schedule-item schedule-morning" data-id="1">
+              <div class="font-medium">John Doe</div>
+              <div>Morning Care • 9:00 AM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">3</div>
+            <div class="schedule-item schedule-therapy" data-id="2">
+              <div class="font-medium">Sarah Smith</div>
+              <div>Therapy • 2:00 PM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">4</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">5</div>
+            <div class="schedule-item schedule-medication" data-id="3">
+              <div class="font-medium">Michael Lee</div>
+              <div>Medication • 8:00 AM</div>
+            </div>
+            <div class="schedule-item schedule-evening" data-id="4">
+              <div class="font-medium">Emma Johnson</div>
+              <div>Evening Care • 6:00 PM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">6</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">7</div>
+            <div class="schedule-item schedule-morning" data-id="5">
+              <div class="font-medium">Robert Wilson</div>
+              <div>Morning Care • 9:30 AM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">8</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">9</div>
+            <div class="schedule-item schedule-therapy" data-id="6">
+              <div class="font-medium">John Doe</div>
+              <div>Therapy • 11:00 AM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">10</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">11</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">12</div>
+            <div class="schedule-item schedule-meal" data-id="7">
+              <div class="font-medium">All Residents</div>
+              <div>Special Meal • 12:30 PM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">13</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">14</div>
+            <div class="schedule-item schedule-morning" data-id="8">
+              <div class="font-medium">Sarah Smith</div>
+              <div>Morning Care • 8:30 AM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">15</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">16</div>
+            <div class="schedule-item schedule-therapy" data-id="9">
+              <div class="font-medium">Michael Lee</div>
+              <div>Therapy • 3:00 PM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">17</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">18</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">19</div>
+            <div class="schedule-item schedule-medication" data-id="10">
+              <div class="font-medium">Emma Johnson</div>
+              <div>Medication • 2:00 PM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2 today">
+            <div class="text-sm font-medium">20</div>
+            <div class="schedule-item schedule-morning" data-id="11">
+              <div class="font-medium">John Doe</div>
+              <div>Morning Care • 9:00 AM</div>
+            </div>
+            <div class="schedule-item schedule-therapy" data-id="12">
+              <div class="font-medium">Robert Wilson</div>
+              <div>Therapy • 11:30 AM</div>
+            </div>
+            <div class="schedule-item schedule-evening" data-id="13">
+              <div class="font-medium">Sarah Smith</div>
+              <div>Evening Care • 6:30 PM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">21</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">22</div>
+            <div class="schedule-item schedule-morning" data-id="14">
+              <div class="font-medium">Michael Lee</div>
+              <div>Morning Care • 8:00 AM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">23</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">24</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">25</div>
+            <div class="schedule-item schedule-therapy" data-id="15">
+              <div class="font-medium">Emma Johnson</div>
+              <div>Therapy • 10:00 AM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">26</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">27</div>
+            <div class="schedule-item schedule-medication" data-id="16">
+              <div class="font-medium">John Doe</div>
+              <div>Medication • 8:30 AM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">28</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">29</div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">30</div>
+            <div class="schedule-item schedule-morning" data-id="17">
+              <div class="font-medium">Sarah Smith</div>
+              <div>Morning Care • 9:00 AM</div>
+            </div>
+          </div>
+          <div class="calendar-day p-2">
+            <div class="text-sm font-medium">31</div>
+            <div class="schedule-item schedule-therapy" data-id="18">
+              <div class="font-medium">Robert Wilson</div>
+              <div>Therapy • 2:00 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- List View (Hidden by default) -->
+      <div class="enhanced-card p-4 lg:p-6 fade-in hidden" id="list-view">
+        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-4 lg:mb-6 gap-4">
+          <h2 class="text-xl font-semibold font-serif text-gray-800 dark:text-gray-100">Today's Schedules</h2>
+          <div class="flex items-center space-x-2">
+            <span class="text-sm text-gray-600 dark:text-gray-400">Sort by:</span>
+            <select class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800">
+              <option>Time</option>
+              <option>Subscriber</option>
+              <option>Staff</option>
+              <option>Type</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[800px]">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Time</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Subscriber</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Schedule Type</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Assigned Staff</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Status</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row border-b border-gray-100 dark:border-gray-800">
+                <td class="py-3 px-4">
+                  <div class="font-medium text-sm lg:text-base">9:00 AM</div>
+                  <div class="text-xs text-gray-500">2 hours ago</div>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-8 h-8 mr-3 text-xs">JD</div>
+                    <div>
+                      <span class="font-medium text-sm lg:text-base">John Doe</span>
+                      <p class="text-xs text-gray-500">Room A-102</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Morning Care</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-6 h-6 mr-2 text-xs">NJ</div>
+                    <span class="text-sm lg:text-base">Nurse Jane</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="status-badge status-completed">Completed</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex space-x-2">
+                    <button class="text-tc hover:text-tc-700 view-schedule" data-id="11">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-blue-600 hover:text-blue-800 edit-schedule" data-id="11">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="table-row border-b border-gray-100 dark:border-gray-800">
+                <td class="py-3 px-4">
+                  <div class="font-medium text-sm lg:text-base">11:30 AM</div>
+                  <div class="text-xs text-gray-500">30 mins from now</div>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-8 h-8 mr-3 text-xs">RW</div>
+                    <div>
+                      <span class="font-medium text-sm lg:text-base">Robert Wilson</span>
+                      <p class="text-xs text-gray-500">Room B-205</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Therapy Session</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-6 h-6 mr-2 text-xs">TA</div>
+                    <span class="text-sm lg:text-base">Therapist Anna</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="status-badge status-scheduled">Scheduled</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex space-x-2">
+                    <button class="text-tc hover:text-tc-700 view-schedule" data-id="12">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-blue-600 hover:text-blue-800 edit-schedule" data-id="12">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="table-row border-b border-gray-100 dark:border-gray-800">
+                <td class="py-3 px-4">
+                  <div class="font-medium text-sm lg:text-base">2:00 PM</div>
+                  <div class="text-xs text-gray-500">3 hours from now</div>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-8 h-8 mr-3 text-xs">ML</div>
+                    <div>
+                      <span class="font-medium text-sm lg:text-base">Michael Lee</span>
+                      <p class="text-xs text-gray-500">Room C-104</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">Medication</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-6 h-6 mr-2 text-xs">CM</div>
+                    <span class="text-sm lg:text-base">Caregiver Mike</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="status-badge status-scheduled">Scheduled</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex space-x-2">
+                    <button class="text-tc hover:text-tc-700 view-schedule" data-id="13">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-blue-600 hover:text-blue-800 edit-schedule" data-id="13">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="table-row border-b border-gray-100 dark:border-gray-800">
+                <td class="py-3 px-4">
+                  <div class="font-medium text-sm lg:text-base">6:30 PM</div>
+                  <div class="text-xs text-gray-500">7.5 hours from now</div>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-8 h-8 mr-3 text-xs">SS</div>
+                    <div>
+                      <span class="font-medium text-sm lg:text-base">Sarah Smith</span>
+                      <p class="text-xs text-gray-500">Room A-201</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Evening Care</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-6 h-6 mr-2 text-xs">CD</div>
+                    <span class="text-sm lg:text-base">Caregiver David</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="status-badge status-scheduled">Scheduled</span>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="flex space-x-2">
+                    <button class="text-tc hover:text-tc-700 view-schedule" data-id="14">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-blue-600 hover:text-blue-800 edit-schedule" data-id="14">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="flex justify-between items-center mt-6">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            Showing 4 of 24 schedules for today
+          </div>
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300">Previous</button>
+            <button class="px-3 py-1 bg-tc text-white rounded-lg text-sm">1</button>
+            <button class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300">2</button>
+            <button class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300">3</button>
+            <button class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Staff Availability -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mt-6 lg:mt-8">
+        <div class="enhanced-card p-4 lg:p-6 fade-in">
+          <h2 class="text-xl font-semibold font-serif mb-4 lg:mb-6 text-gray-800 dark:text-gray-100">Staff Availability</h2>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 bg-tc/5 rounded-xl">
+              <div class="flex items-center">
+                <div class="avatar-placeholder rounded-full w-8 h-8 lg:w-10 lg:h-10 mr-3 text-xs lg:text-sm">NJ</div>
+                <div>
+                  <p class="font-medium text-sm lg:text-base">Nurse Jane</p>
+                  <p class="text-sm text-gray-600">6 assignments today</p>
+                </div>
+              </div>
+              <span class="status-badge status-scheduled">Available</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-tc/5 rounded-xl">
+              <div class="flex items-center">
+                <div class="avatar-placeholder rounded-full w-8 h-8 lg:w-10 lg:h-10 mr-3 text-xs lg:text-sm">DS</div>
+                <div>
+                  <p class="font-medium text-sm lg:text-base">Dr. Smith</p>
+                  <p class="text-sm text-gray-600">3 appointments today</p>
+                </div>
+              </div>
+              <span class="status-badge status-scheduled">Available</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-tc/5 rounded-xl">
+              <div class="flex items-center">
+                <div class="avatar-placeholder rounded-full w-8 h-8 lg:w-10 lg:h-10 mr-3 text-xs lg:text-sm">CM</div>
+                <div>
+                  <p class="font-medium text-sm lg:text-base">Caregiver Mike</p>
+                  <p class="text-sm text-gray-600">8 assignments today</p>
+                </div>
+              </div>
+              <span class="status-badge status-in-progress">On Duty</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-tc/5 rounded-xl">
+              <div class="flex items-center">
+                <div class="avatar-placeholder rounded-full w-8 h-8 lg:w-10 lg:h-10 mr-3 text-xs lg:text-sm">TA</div>
+                <div>
+                  <p class="font-medium text-sm lg:text-base">Therapist Anna</p>
+                  <p class="text-sm text-gray-600">4 sessions today</p>
+                </div>
+              </div>
+              <span class="status-badge status-scheduled">Available</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-tc/5 rounded-xl">
+              <div class="flex items-center">
+                <div class="avatar-placeholder rounded-full w-8 h-8 lg:w-10 lg:h-10 mr-3 text-xs lg:text-sm">CD</div>
+                <div>
+                  <p class="font-medium text-sm lg:text-base">Caregiver David</p>
+                  <p class="text-sm text-gray-600">5 assignments today</p>
+                </div>
+              </div>
+              <span class="status-badge status-cancelled">On Leave</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="enhanced-card p-4 lg:p-6 fade-in">
+          <h2 class="text-xl font-semibold font-serif mb-4 lg:mb-6 text-gray-800 dark:text-gray-100">Schedule Statistics</h2>
+          <div class="space-y-4 lg:space-y-6">
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600 dark:text-gray-400">Morning Care Completion</span>
+                <span class="font-medium text-gray-800 dark:text-gray-100">85%</span>
+              </div>
+              <div class="progress-container">
+                <div class="progress-fill" style="width: 85%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600 dark:text-gray-400">Therapy Sessions</span>
+                <span class="font-medium text-gray-800 dark:text-gray-100">92%</span>
+              </div>
+              <div class="progress-container">
+                <div class="progress-fill" style="width: 92%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600 dark:text-gray-400">Medication Administration</span>
+                <span class="font-medium text-gray-800 dark:text-gray-100">78%</span>
+              </div>
+              <div class="progress-container">
+                <div class="progress-fill" style="width: 78%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600 dark:text-gray-400">Evening Care</span>
+                <span class="font-medium text-gray-800 dark:text-gray-100">88%</span>
+              </div>
+              <div class="progress-container">
+                <div class="progress-fill" style="width: 88%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule Detail Modal -->
+  <div class="modal-overlay" id="schedule-detail-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="text-xl font-semibold font-serif text-gray-800 dark:text-gray-100">Schedule Details</h3>
+        <button class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" id="close-schedule-detail">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="space-y-6">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="avatar-placeholder rounded-full w-10 h-10 lg:w-12 lg:h-12 mr-3 lg:mr-4 text-sm lg:text-lg">JD</div>
+              <div>
+                <h4 class="text-lg font-bold text-gray-800 dark:text-gray-100">John Doe</h4>
+                <p class="text-gray-600 dark:text-gray-400 text-sm lg:text-base">Room A-102 • Premium Plan</p>
+              </div>
+            </div>
+            <span class="status-badge status-completed">Completed</span>
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="p-4 bg-tc/5 rounded-xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Schedule Type</p>
+              <p class="font-medium text-gray-800 dark:text-gray-100 text-sm lg:text-base">Morning Care</p>
+            </div>
+            <div class="p-4 bg-tc/5 rounded-xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Date & Time</p>
+              <p class="font-medium text-gray-800 dark:text-gray-100 text-sm lg:text-base">Jan 20, 2025 • 9:00 AM</p>
+            </div>
+            <div class="p-4 bg-tc/5 rounded-xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Duration</p>
+              <p class="font-medium text-gray-800 dark:text-gray-100 text-sm lg:text-base">3 hours</p>
+            </div>
+            <div class="p-4 bg-tc/5 rounded-xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Assigned Staff</p>
+              <p class="font-medium text-gray-800 dark:text-gray-100 text-sm lg:text-base">Nurse Jane</p>
+            </div>
+          </div>
+          
+          <div>
+            <h5 class="font-medium text-gray-800 dark:text-gray-100 mb-2 text-sm lg:text-base">Care Instructions</h5>
+            <div class="p-4 bg-tc/5 rounded-xl">
+              <p class="text-sm">Assist with morning routine, medication administration at 9:30 AM, and light breakfast. Prefers warm beverages.</p>
+            </div>
+          </div>
+          
+          <div>
+            <h5 class="font-medium text-gray-800 dark:text-gray-100 mb-2 text-sm lg:text-base">Notes & Observations</h5>
+            <div class="p-4 bg-tc/5 rounded-xl">
+              <p class="text-sm">Completed all tasks. Resident was in good spirits today. Blood pressure: 125/80.</p>
+              <p class="text-xs text-gray-600 mt-2">— Nurse Jane, Jan 20, 2025 at 12:05 PM</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-300 text-sm lg:text-base">
+          Add Note
+        </button>
+        <button class="px-4 py-2 rounded-lg btn-premium text-white font-medium text-sm lg:text-base">
+          Edit Schedule
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Schedule Modal -->
+  <div class="modal-overlay" id="add-schedule-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="text-xl font-semibold font-serif text-gray-800 dark:text-gray-100">Add New Schedule</h3>
+        <button class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" id="close-add-schedule">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subscriber</label>
+            <select class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base">
+              <option value="">Select Subscriber</option>
+              <option value="1">John Doe (A-102)</option>
+              <option value="2">Sarah Smith (A-201)</option>
+              <option value="3">Michael Lee (C-104)</option>
+              <option value="4">Emma Johnson (B-103)</option>
+              <option value="5">Robert Wilson (B-205)</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
+              <input type="date" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base" value="2025-01-20">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Time</label>
+              <input type="time" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base" value="14:00">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Schedule Type</label>
+            <select class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base">
+              <option value="morning">Morning Care</option>
+              <option value="evening">Evening Care</option>
+              <option value="therapy">Therapy Session</option>
+              <option value="medication">Medication</option>
+              <option value="meal">Meal Service</option>
+              <option value="personal">Personal Care</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Assigned Staff</label>
+            <select class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base">
+              <option value="nurse-jane">Nurse Jane</option>
+              <option value="dr-smith">Dr. Smith</option>
+              <option value="caregiver-mike">Caregiver Mike</option>
+              <option value="therapist-anna">Therapist Anna</option>
+              <option value="caregiver-david">Caregiver David</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Recurrence</label>
+            <select class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base">
+              <option value="once">One-time</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="weekdays">Weekdays (Mon-Fri)</option>
+              <option value="weekends">Weekends</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Duration (minutes)</label>
+            <input type="number" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base" value="60" min="15" step="15">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Care Instructions</label>
+            <textarea class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-sm lg:text-base" rows="3" placeholder="Add specific care instructions..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-300 text-sm lg:text-base" id="cancel-add-schedule">
+          Cancel
+        </button>
+        <button class="px-4 py-2 rounded-lg btn-premium text-white font-medium text-sm lg:text-base">
+          Save Schedule
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle functionality for both desktop and mobile
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+    
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      const newIcon = isDark ? '☀️' : '🌙';
+      
+      if (themeToggle) themeToggle.textContent = newIcon;
+      if (themeToggleMobile) themeToggleMobile.textContent = newIcon;
+    }
+    
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
+    
+    if (themeToggleMobile) {
+      themeToggleMobile.addEventListener('click', toggleTheme);
+    }
+
+    // Mobile sidebar functionality
+    const sidebar = document.getElementById('sidebar');
+    const openSidebarBtn = document.getElementById('open-sidebar');
+    const openSidebarDesktopBtn = document.getElementById('open-sidebar-desktop');
+    const closeSidebarBtn = document.getElementById('close-sidebar');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    
+    openSidebarBtn.addEventListener('click', function() {
+      sidebar.classList.add('active');
+      mobileMenuOverlay.classList.add('active');
+    });
+    
+    if (openSidebarDesktopBtn) {
+      openSidebarDesktopBtn.addEventListener('click', function() {
+        sidebar.classList.add('active');
+        mobileMenuOverlay.classList.add('active');
+      });
+    }
+    
+    closeSidebarBtn.addEventListener('click', function() {
+      sidebar.classList.remove('active');
+      mobileMenuOverlay.classList.remove('active');
+    });
+    
+    mobileMenuOverlay.addEventListener('click', function() {
+      sidebar.classList.remove('active');
+      mobileMenuOverlay.classList.remove('active');
+    });
+
+    // Logout functionality
+    const logoutModal = document.getElementById('logout-modal');
+    const logoutBtnSidebar = document.getElementById('logout-btn-sidebar');
+    const logoutBtnNavbar = document.getElementById('logout-btn-navbar');
+    const cancelLogout = document.getElementById('cancel-logout');
+    const confirmLogout = document.getElementById('confirm-logout');
+    
+    // Show logout modal
+    function showLogoutModal() {
+      logoutModal.classList.add('active');
+    }
+    
+    // Hide logout modal
+    function hideLogoutModal() {
+      logoutModal.classList.remove('active');
+    }
+    
+    // Logout action
+    function performLogout() {
+      // In a real application, you would redirect to logout URL or clear session
+      alert('Logging out... Redirecting to login page.');
+      // window.location.href = '/login'; // Uncomment this in a real application
+    }
+    
+    // Event listeners for logout buttons
+    logoutBtnSidebar.addEventListener('click', showLogoutModal);
+    if (logoutBtnNavbar) {
+      logoutBtnNavbar.addEventListener('click', showLogoutModal);
+    }
+    
+    // Event listeners for logout modal
+    cancelLogout.addEventListener('click', hideLogoutModal);
+    confirmLogout.addEventListener('click', performLogout);
+    
+    // Close modal when clicking outside
+    logoutModal.addEventListener('click', function(e) {
+      if (e.target === logoutModal) {
+        hideLogoutModal();
+      }
+    });
+
+    // Toggle filters section
+    document.getElementById('toggle-filters').addEventListener('click', function() {
+      const filtersSection = document.getElementById('filters-section');
+      filtersSection.classList.toggle('active');
+    });
+
+    // View toggle functionality
+    const viewToggleButtons = document.querySelectorAll('.view-toggle button');
+    const calendarView = document.getElementById('calendar-view');
+    const listView = document.getElementById('list-view');
+    
+    viewToggleButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        viewToggleButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Show/hide views based on selection
+        const view = this.getAttribute('data-view');
+        if (view === 'calendar') {
+          calendarView.classList.remove('hidden');
+          listView.classList.add('hidden');
+        } else {
+          calendarView.classList.add('hidden');
+          listView.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Modal functionality
+    const scheduleDetailModal = document.getElementById('schedule-detail-modal');
+    const addScheduleModal = document.getElementById('add-schedule-modal');
+    
+    // Open schedule detail modal
+    document.querySelectorAll('.view-schedule, .schedule-item').forEach(element => {
+      element.addEventListener('click', function() {
+        scheduleDetailModal.classList.add('active');
+      });
+    });
+    
+    // Close schedule detail modal
+    document.getElementById('close-schedule-detail').addEventListener('click', function() {
+      scheduleDetailModal.classList.remove('active');
+    });
+    
+    // Open add schedule modal
+    document.getElementById('add-schedule').addEventListener('click', function() {
+      addScheduleModal.classList.add('active');
+    });
+    
+    // Close add schedule modal
+    document.getElementById('close-add-schedule').addEventListener('click', function() {
+      addScheduleModal.classList.remove('active');
+    });
+    
+    document.getElementById('cancel-add-schedule').addEventListener('click', function() {
+      addScheduleModal.classList.remove('active');
+    });
+    
+    // Close modals when clicking outside
+    [scheduleDetailModal, addScheduleModal].forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+    });
+    
+    // Print functionality
+    document.getElementById('print-schedule').addEventListener('click', function() {
+      alert('Print functionality would generate a printable schedule report.');
+    });
+    
+    // Edit schedule functionality
+    document.querySelectorAll('.edit-schedule').forEach(button => {
+      button.addEventListener('click', function() {
+        addScheduleModal.classList.add('active');
+      });
+    });
+
+    // Image error handling - if all external images fail, show fallback avatars
+    window.addEventListener('load', function() {
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        if (!img.complete || img.naturalHeight === 0) {
+          // Image failed to load
+          const fallbackId = img.getAttribute('onerror').match(/document\.getElementById\('([^']+)'\)/)[1];
+          img.style.display = 'none';
+          document.getElementById(fallbackId).style.display = 'flex';
+        }
+      });
+    });
+  </script>
+</body> 
+</html>

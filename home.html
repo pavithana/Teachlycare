@@ -1,0 +1,1612 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TechlyCare — Premium Care Home Management</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tc: { 
+              DEFAULT: '#0ea5a9', 
+              50: '#f0fdfa', 
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              500: '#0ea5a9',
+              600: '#0d9488',
+              700: '#0f766e'
+            },
+            navy: '#0f1724',
+            muted: '#6b7280',
+            surface: '#f8fafc',
+            premium: {
+              gold: '#d4af37',
+              silver: '#c0c0c0'
+            }
+          },
+          boxShadow: {
+            'soft-lg': '0 18px 40px rgba(15,23,36,0.08)',
+            'card': '0 8px 24px rgba(15,23,36,0.06)',
+            'glow': '0 0 30px rgba(14,165,169,0.2)',
+            'premium': '0 20px 60px rgba(14,165,169,0.15)',
+            'elegant': '0 25px 50px -12px rgba(15,23,36,0.25)'
+          },
+          fontFamily: { 
+            sans: ['Inter','ui-sans-serif','system-ui'],
+            serif: ['Playfair Display', 'serif']
+          },
+          backgroundImage: {
+            'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            'gradient-premium': 'linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 50%, #0d9488 100%)',
+            'gradient-gold': 'linear-gradient(135deg, #d4af37 0%, #f7ef8a 100%)',
+            'gradient-silver': 'linear-gradient(135deg, #c0c0c0 0%, #f8fafc 100%)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    /* Enhanced Footer Styles */
+    .gradient-text {
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 50%, #0d9488 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .footer-bg {
+      background: linear-gradient(135deg, #0f1724 0%, #1e293b 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .footer-decoration {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(14, 165, 169, 0.15) 0%, rgba(14, 165, 169, 0) 70%);
+      filter: blur(20px);
+      z-index: 0;
+    }
+    
+    .footer-decoration-1 {
+      top: -150px;
+      right: -100px;
+    }
+    
+    .footer-decoration-2 {
+      bottom: -200px;
+      left: -150px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0) 70%);
+    }
+    
+    .footer-content {
+      position: relative;
+      z-index: 10;
+    }
+    
+    .footer-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(14, 165, 169, 0.3) 50%, transparent 100%);
+    }
+    
+    .footer-link {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-link:hover {
+      color: #0ea5a9;
+      transform: translateX(5px);
+    }
+    
+    .footer-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #0ea5a9;
+      transition: width 0.3s ease;
+    }
+    
+    .footer-link:hover::after {
+      width: 100%;
+    }
+    
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .social-icon:hover {
+      background: rgba(14, 165, 169, 0.2);
+      transform: translateY(-3px);
+    }
+
+    /* Premium animations */
+    .premium-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.85);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+
+    /* Floating animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(1deg); }
+    }
+    .float-animation {
+      animation: float 8s ease-in-out infinite;
+    }
+
+    /* Elegant underline */
+    .elegant-underline {
+      position: relative;
+    }
+    .elegant-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+      border-radius: 2px;
+    }
+
+    /* Premium button */
+    .btn-premium {
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 100%);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .btn-premium::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.7s ease;
+    }
+    .btn-premium:hover::before {
+      left: 100%;
+    }
+    .btn-premium:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(14,165,169,0.3);
+    }
+
+    /* Feature icon animation */
+    .feature-icon {
+      transition: all 0.4s ease;
+    }
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Progress bar animation */
+    .progress-bar {
+      transition: width 1.5s ease-in-out;
+    }
+
+    /* Fade-in animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Custom shape dividers */
+    .wave-divider {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+    }
+    .wave-divider svg {
+      position: relative;
+      display: block;
+      width: calc(100% + 1.3px);
+      height: 70px;
+    }
+    .wave-divider .shape-fill {
+      fill: #FFFFFF;
+    }
+
+    /* Premium badge */
+    .premium-badge {
+      background: linear-gradient(135deg, #d4af37 0%, #f7ef8a 100%);
+      color: #0f1724;
+      position: relative;
+      overflow: hidden;
+    }
+    .premium-badge::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255,255,255,0.1);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+    }
+    .premium-badge:hover::after {
+      left: 50%;
+      top: 50%;
+    }
+
+    /* Scroll to top button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 3rem;
+      height: 3rem;
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(14,165,169,0.3);
+      transition: all 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 1000;
+    }
+
+    .scroll-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(14,165,169,0.4);
+    }
+
+    /* DEMO REQUEST MODAL STYLES */
+    .demo-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 36, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    
+    .demo-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .demo-modal {
+      background: white;
+      border-radius: 24px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(30px);
+      opacity: 0;
+      transition: all 0.4s ease;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+    
+    .demo-modal-overlay.active .demo-modal {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .demo-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(14, 165, 169, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    
+    .demo-modal-close:hover {
+      background: rgba(14, 165, 169, 0.2);
+      transform: rotate(90deg);
+    }
+    
+    .demo-modal-header {
+      padding: 2rem 2rem 0;
+    }
+    
+    .demo-modal-content {
+      padding: 1.5rem 2rem 2rem;
+    }
+    
+    .demo-form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .demo-form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #1f2937;
+    }
+    
+    .demo-form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      font-size: 16px;
+    }
+    
+    .demo-form-input:focus {
+      border-color: #0ea5a9;
+      box-shadow: 0 0 0 3px rgba(14, 165, 169, 0.1);
+      outline: none;
+    }
+    
+    .demo-form-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: white;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 20px;
+    }
+    
+    .demo-form-select:focus {
+      border-color: #0ea5a9;
+      box-shadow: 0 0 0 3px rgba(14, 165, 169, 0.1);
+      outline: none;
+    }
+    
+    .demo-form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .demo-form-textarea:focus {
+      border-color: #0ea5a9;
+      box-shadow: 0 0 0 3px rgba(14, 165, 169, 0.1);
+      outline: none;
+    }
+    
+    .demo-submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    .demo-submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(14, 165, 169, 0.3);
+    }
+    
+    .demo-submit-btn:disabled {
+      background: #e5e7eb;
+      color: #9ca3af;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    /* Success Message Modal */
+    .success-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 36, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    
+    .success-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .success-modal {
+      background: white;
+      border-radius: 24px;
+      width: 90%;
+      max-width: 400px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(30px);
+      opacity: 0;
+      transition: all 0.4s ease;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .success-modal-overlay.active .success-modal {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: white;
+      font-size: 2.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .demo-modal,
+      .success-modal {
+        width: 95%;
+        border-radius: 20px;
+      }
+      
+      .demo-modal-header,
+      .demo-modal-content {
+        padding: 1.5rem;
+      }
+      
+      .success-modal {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-sans antialiased bg-surface text-navy overflow-x-hidden">
+
+  <!-- Demo Request Modal -->
+  <div id="demoModal" class="demo-modal-overlay">
+    <div class="demo-modal">
+      <div class="demo-modal-close" id="closeDemoModal">
+        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </div>
+      
+      <div class="demo-modal-header">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Request a Demo</h2>
+        <p class="text-gray-600">Fill in your details and we'll show you how TechlyCare can transform your care home operations.</p>
+      </div>
+      
+      <div class="demo-modal-content">
+        <form id="demoForm">
+          <div class="demo-form-group">
+            <label class="demo-form-label" for="fullName">Full Name *</label>
+            <input type="text" id="fullName" class="demo-form-input" required placeholder="John Smith">
+          </div>
+          
+          <div class="demo-form-group">
+            <label class="demo-form-label" for="email">Email Address *</label>
+            <input type="email" id="email" class="demo-form-input" required placeholder="john@example.com">
+          </div>
+          
+          <div class="demo-form-group">
+            <label class="demo-form-label" for="phone">Phone Number *</label>
+            <input type="tel" id="phone" class="demo-form-input" required placeholder="+44 1234 567890">
+          </div>
+          
+          <div class="demo-form-group">
+            <label class="demo-form-label" for="careHomeName">Care Home Name *</label>
+            <input type="text" id="careHomeName" class="demo-form-input" required placeholder="Sunshine Care Home">
+          </div>
+          
+          <div class="demo-form-group">
+            <label class="demo-form-label" for="residentCount">Number of Residents</label>
+            <select id="residentCount" class="demo-form-select">
+              <option value="1-10">1-10</option>
+              <option value="11-30">11-30</option>
+              <option value="31-50">31-50</option>
+              <option value="51-100">51-100</option>
+              <option value="100+">100+</option>
+            </select>
+          </div>
+          
+          <div class="demo-form-group">
+            <label class="demo-form-label" for="jobTitle">Job Title</label>
+            <input type="text" id="jobTitle" class="demo-form-input" placeholder="Care Home Manager">
+          </div>
+          
+          <div class="demo-form-group">
+            <label class="demo-form-label" for="message">Additional Information (Optional)</label>
+            <textarea id="message" class="demo-form-textarea" placeholder="Tell us about your current challenges or specific needs..."></textarea>
+          </div>
+          
+          <div class="demo-form-group">
+            <label class="flex items-center">
+              <input type="checkbox" id="agreeTerms" class="mr-2 h-4 w-4 text-tc focus:ring-tc border-gray-300 rounded" required>
+              <span class="text-sm text-gray-600">I agree to receive emails about TechlyCare and its services. *</span>
+            </label>
+          </div>
+          
+          <button type="submit" class="demo-submit-btn" id="submitDemoForm">
+            <span id="submitText">Submit Request</span>
+            <span id="submitLoading" class="hidden">Processing...</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Message Modal -->
+  <div id="successModal" class="success-modal-overlay">
+    <div class="success-modal">
+      <div class="success-icon">
+        <i class="fas fa-check"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-800 mb-3">Request Submitted!</h3>
+      <p class="text-gray-600 mb-6">
+        Thank you for your demo request! Our team will contact you within 24 hours to schedule your personalized demo.
+      </p>
+      <p class="text-gray-500 text-sm mb-8">
+        In the meantime, you can explore our pricing and customize your solution.
+      </p>
+      <button id="successOkBtn" class="btn-premium px-8 py-3 rounded-full text-white font-semibold text-lg w-full">
+        Explore Pricing & Modules
+      </button>
+    </div>
+  </div>
+
+ <!-- Home Page Header -->
+<header class="fixed top-0 left-0 w-full z-50 glass-effect shadow-sm transition-all duration-500">
+  <div class="max-w-7xl mx-auto px-6">
+    <nav class="flex items-center justify-between py-4">
+      <!-- Premium Brand -->
+      <a href="home.html" class="flex items-center gap-3 group">
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-tc group-hover:scale-110 transition-all duration-500" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21s-6.7-5.2-9.3-9.6C.8 8.4 2.2 3.9 6 3.1c2.2-.5 3.8 1 4.8 2.4 1-1.4 2.6-2.9 4.8-2.4 3.8.8 5.2 5.3 3.3 8.3C18.7 15.8 12 21 12 21z"/>
+          </svg>
+          <div class="absolute -top-1 -right-1 w-3 h-3 bg-premium-gold rounded-full"></div>
+        </div>
+        <div class="leading-tight">
+          <div class="text-xl font-bold">TechlyCare</div>
+          <div class="text-xs text-muted -mt-0.5 tracking-wider">CARE MANAGEMENT</div>
+        </div>
+      </a>
+
+      <!-- Premium Links -->
+      <ul class="hidden lg:flex items-center gap-10 text-sm font-medium">
+        <li><a class="text-tc font-semibold relative elegant-underline" href="index.html">Home</a></li>
+        <li><a class="text-navy hover:text-tc transition-all duration-300" href="about.html">About</a></li>
+        <li><a class="text-navy hover:text-tc transition-all duration-300" href="features.html">Features</a></li>
+        <li><a class="text-navy hover:text-tc transition-all duration-300" href="pricing.html">Pricing</a></li>
+        <li><a class="text-navy hover:text-tc transition-all duration-300" href="FQA.HTML">FQA</a></li>
+        <li><a class="text-navy hover:text-tc transition-all duration-300" href="contact.html">Contact</a></li>
+      </ul>
+
+      <!-- Premium Buttons -->
+      <div class="hidden lg:flex items-center gap-4">
+        <a href="login.html" class="px-5 py-2.5 rounded-full border border-gray-200 text-sm text-navy hover:bg-white/50 transition-all duration-300">Login</a>
+        <button id="requestDemoBtn" class="btn-premium px-6 py-2.5 rounded-full text-white text-sm font-semibold shadow-premium">Request demo</button>
+      </div>
+
+      <!-- Mobile menu button -->
+      <button id="menuBtn" class="lg:hidden p-2 rounded-lg text-navy hover:bg-white/50 transition-all duration-300" title="Toggle menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Mobile dropdown -->
+  <div id="mobileMenu" class="hidden lg:hidden glass-effect border-t border-white/20">
+    <div class="px-4 pb-6">
+      <ul class="flex flex-col gap-3 py-4 text-sm font-medium">
+        <li><a href="home.html" class="block px-3 py-2 rounded-md text-tc font-semibold bg-tc/5 transition">Home</a></li>
+        <li><a href="about.html" class="block px-3 py-2 rounded-md text-navy hover:bg-white/50 transition">About</a></li>
+        <li><a href="features.html" class="block px-3 py-2 rounded-md text-navy hover:bg-white/50 transition">Features</a></li>
+        <li><a href="pricing.html" class="block px-3 py-2 rounded-md text-navy hover:bg-white/50 transition">Pricing</a></li>
+        <li><a href="FQA.HTML" class="block px-3 py-2 rounded-md text-navy hover:bg-white/50 transition">FQA</a></li>
+        <li><a href="contact.html" class="block px-3 py-2 rounded-md text-navy hover:bg-white/50 transition">Contact</a></li>
+      </ul>
+      <div class="flex gap-3 pt-2">
+        <a href="login.html" class="flex-1 px-4 py-2.5 rounded-full border border-gray-200 text-center">
+          Login
+        </a>
+        <button id="mobileRequestDemoBtn" class="flex-1 px-4 py-2.5 rounded-full bg-gradient-premium text-white font-semibold text-center">
+          Request demo
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+  <!-- MAIN CONTENT -->
+  <main id="home" class="pt-24">
+
+    <!-- PREMIUM HERO SECTION -->
+    <section class="relative min-h-screen flex items-center overflow-hidden">
+      <!-- Background Elements -->
+      <div class="absolute inset-0 bg-gradient-to-br from-tc-50 via-white to-tc-100 z-0"></div>
+      <div class="absolute top-10 left-10 w-72 h-72 bg-tc/10 rounded-full blur-3xl -z-10"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 bg-tc-200/30 rounded-full blur-3xl -z-10"></div>
+      
+      <!-- Floating Elements -->
+      <div class="absolute top-1/4 left-1/4 w-6 h-6 bg-tc rounded-full opacity-70 float-animation"></div>
+      <div class="absolute top-1/3 right-1/4 w-4 h-4 bg-premium-gold rounded-full opacity-60 float-animation" style="animation-delay: 1s;"></div>
+      <div class="absolute bottom-1/4 left-1/3 w-8 h-8 bg-tc-600 rounded-full opacity-40 float-animation" style="animation-delay: 2s;"></div>
+
+      <div class="max-w-7xl mx-auto px-6 py-20 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <!-- Premium Content -->
+          <div class="space-y-8 fade-in">
+            <div class="flex items-center gap-4">
+              <span class="premium-badge px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">PREMIUM EDITION</span>
+              <span class="inline-flex items-center gap-1 text-sm text-muted">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                Trusted by 300+ care homes
+              </span>
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-serif font-bold leading-tight">
+              Care Management <span class="gradient-text">Perfected</span> for Modern Healthcare
+            </h1>
+            
+            <p class="text-lg text-muted max-w-xl leading-relaxed">
+              Experience the future of care home management with our premium platform. Streamline operations, enhance resident care, and simplify compliance with elegant, intuitive technology.
+            </p>
+
+            <div class="flex flex-wrap gap-5 items-center">
+              <button id="heroRequestDemoBtn" class="btn-premium px-8 py-4 rounded-xl text-white font-semibold text-lg shadow-premium">
+                Request Demo
+              </button>
+              <a href="features.html" class="group inline-flex items-center gap-2 px-6 py-4 rounded-xl border border-gray-200 text-navy hover:bg-white/50 transition-all duration-300">
+                <span>Explore Features</span>
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+
+            <!-- Trust Indicators -->
+            <div class="pt-8 border-t border-gray-100">
+              <p class="text-sm text-muted mb-4">Trusted by leading care providers</p>
+              <div class="flex items-center gap-8 opacity-60">
+                <div class="h-8 w-auto bg-gray-200 rounded-lg"></div>
+                <div class="h-8 w-auto bg-gray-200 rounded-lg"></div>
+                <div class="h-8 w-auto bg-gray-200 rounded-lg"></div>
+                <div class="h-8 w-auto bg-gray-200 rounded-lg"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Premium Dashboard Visual -->
+          <div class="relative fade-in">
+            <div class="premium-card rounded-3xl p-6 shadow-elegant transform rotate-1 float-animation">
+              <div class="absolute -top-4 -right-4 premium-badge px-3 py-1 rounded-lg text-xs font-bold">LIVE PREVIEW</div>
+              
+              <div class="p-5 border-b border-gray-100 flex items-center justify-between">
+                <div>
+                  <div class="text-sm text-muted font-medium">Premium Dashboard</div>
+                  <div class="text-xl font-bold">Today · 09:30</div>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-tc/10 text-tc font-semibold text-sm flex items-center gap-1">
+                  <span class="w-2 h-2 bg-tc rounded-full animate-pulse"></span>
+                  Live
+                </span>
+              </div>
+              
+              <div class="p-6 bg-gradient-to-br from-white to-tc-50/30 space-y-5">
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="p-4 premium-card rounded-xl shadow-sm">
+                    <div class="text-xs text-muted uppercase tracking-wide">Residents</div>
+                    <div class="text-2xl font-bold mt-1">124</div>
+                  </div>
+                  <div class="p-4 premium-card rounded-xl shadow-sm">
+                    <div class="text-xs text-muted uppercase tracking-wide">Med Due</div>
+                    <div class="text-2xl font-bold mt-1">8</div>
+                  </div>
+                </div>
+                
+                <div class="p-4 premium-card rounded-xl shadow-sm">
+                  <div class="flex justify-between items-center mb-2">
+                    <div class="text-xs text-muted uppercase tracking-wide">Daily Tasks</div>
+                    <div class="text-xs font-semibold text-tc">38% Complete</div>
+                  </div>
+                  <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                    <div class="h-3 bg-gradient-premium rounded-full progress-bar" style="width: 38%"></div>
+                  </div>
+                </div>
+                
+                <div class="p-4 premium-card rounded-xl shadow-sm">
+                  <div class="flex justify-between items-center">
+                    <div>
+                      <div class="text-xs text-muted uppercase tracking-wide">Staff On Duty</div>
+                      <div class="text-lg font-bold mt-1">24/32</div>
+                    </div>
+                    <div class="text-tc">
+                      <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="p-4 flex items-center justify-between border-t border-gray-100 bg-white/50">
+                <div class="text-sm text-muted"> Demo — Live Data</div>
+                <button id="dashboardRequestDemoBtn" class="btn-premium px-4 py-2 rounded-lg text-white text-sm font-semibold">Book Exclusive Demo</button>
+              </div>
+            </div>
+            
+            <!-- Decorative elements -->
+            <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-premium-gold/10 rounded-full -z-10"></div>
+            <div class="absolute -top-6 -right-6 w-32 h-32 bg-tc/10 rounded-full -z-10"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREMIUM FEATURES -->
+    <section id="features" class="py-24 bg-white relative overflow-hidden">
+      <!-- Background Elements -->
+      <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-tc-50 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl opacity-50"></div>
+      <div class="absolute bottom-0 left-0 w-1/2 h-1/2 bg-tc-100 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl opacity-30"></div>
+      
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16 fade-in">
+          <span class="premium-badge px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-4 inline-block">EXCLUSIVE FEATURES</span>
+          <h2 class="text-4xl md:text-5xl font-serif font-bold mb-6">Designed for <span class="gradient-text">Excellence</span> in Care</h2>
+          <p class="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
+            Our  platform combines elegant design with powerful functionality to transform care home management.
+          </p>
+        </div>
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <!-- Feature 1 -->
+          <div class="feature-card premium-card rounded-2xl p-8 shadow-card hover:shadow-premium transition-all duration-500 fade-in group">
+            <div class="w-16 h-16 mb-6 flex items-center justify-center bg-gradient-premium rounded-2xl text-white text-2xl feature-icon">
+              🏠
+            </div>
+            <h3 class="font-bold text-xl mb-3">Resident Records</h3>
+            <p class="text-muted leading-relaxed">Comprehensive digital profiles with medical history, care plans, and secure document storage.</p>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex items-center text-tc text-sm font-medium">
+              <span>Learn more</span>
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="feature-card premium-card rounded-2xl p-8 shadow-card hover:shadow-premium transition-all duration-500 fade-in group">
+            <div class="w-16 h-16 mb-6 flex items-center justify-center bg-gradient-premium rounded-2xl text-white text-2xl feature-icon">
+              💊
+            </div>
+            <h3 class="font-bold text-xl mb-3">Medication Management</h3>
+            <p class="text-muted leading-relaxed">Advanced MAR charts with barcode scanning, alerts, and full audit trails for complete safety.</p>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex items-center text-tc text-sm font-medium">
+              <span>Learn more</span>
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="feature-card premium-card rounded-2xl p-8 shadow-card hover:shadow-premium transition-all duration-500 fade-in group">
+            <div class="w-16 h-16 mb-6 flex items-center justify-center bg-gradient-premium rounded-2xl text-white text-2xl feature-icon">
+              👥
+            </div>
+            <h3 class="font-bold text-xl mb-3">Staff & Rotas</h3>
+            <p class="text-muted leading-relaxed">Intelligent scheduling, training tracking, and performance analytics for optimal staffing.</p>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex items-center text-tc text-sm font-medium">
+              <span>Learn more</span>
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="feature-card premium-card rounded-2xl p-8 shadow-card hover:shadow-premium transition-all duration-500 fade-in group">
+            <div class="w-16 h-16 mb-6 flex items-center justify-center bg-gradient-premium rounded-2xl text-white text-2xl feature-icon">
+              📊
+            </div>
+            <h3 class="font-bold text-xl mb-3">Advanced Reporting</h3>
+            <p class="text-muted leading-relaxed">CQC-ready reports, real-time analytics, and custom dashboards for data-driven decisions.</p>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex items-center text-tc text-sm font-medium">
+              <span>Learn more</span>
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREMIUM TESTIMONIALS -->
+    <section id="testimonials" class="py-24 bg-gradient-to-br from-tc-50 to-white relative overflow-hidden">
+      <!-- Background Elements -->
+      <div class="absolute top-0 left-0 w-96 h-96 bg-tc/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
+      <div class="absolute bottom-0 right-0 w-96 h-96 bg-premium-gold/5 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl"></div>
+      
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16 fade-in">
+          <span class="premium-badge px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-4 inline-block">CLIENT TESTIMONIALS</span>
+          <h2 class="text-4xl md:text-5xl font-serif font-bold mb-6">Trusted by <span class="gradient-text">Industry Leaders</span></h2>
+          <p class="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
+            Discover why leading care providers choose TechlyCare Premium for their digital transformation.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Testimonial 1 -->
+          <div class="premium-card rounded-2xl p-8 shadow-card hover:shadow-premium transition-all duration-500 fade-in group">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="relative">
+                <img src="https://i.pravatar.cc/60?img=32" alt="Sarah" class="w-14 h-14 rounded-full">
+                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-premium-gold rounded-full flex items-center justify-center">
+                  <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <div class="font-bold text-navy">Sarah Johnson</div>
+                <div class="text-sm text-muted">Care Manager, EliteCare Homes</div>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="text-6xl text-tc/20 absolute -top-4 -left-2 font-serif">"</div>
+              <p class="text-navy relative z-10 italic leading-relaxed">
+                TechlyCare  transformed our daily operations. The medication module alone saved us 15 hours per week in admin time.
+              </p>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between">
+              <div class="flex text-premium-gold">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+              </div>
+              <div class="text-xs text-muted">2 weeks ago</div>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="premium-card rounded-2xl p-8 shadow-card hover:shadow-premium transition-all duration-500 fade-in group">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="relative">
+                <img src="https://i.pravatar.cc/60?img=44" alt="John" class="w-14 h-14 rounded-full">
+                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-premium-gold rounded-full flex items-center justify-center">
+                  <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <div class="font-bold text-navy">Michael Roberts</div>
+                <div class="text-sm text-muted">Nursing Director, Heritage Care</div>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="text-6xl text-tc/20 absolute -top-4 -left-2 font-serif">"</div>
+              <p class="text-navy relative z-10 italic leading-relaxed">
+                The reporting features helped us achieve an 'Outstanding' CQC rating. The inspectors were impressed with our digital records.
+              </p>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between">
+              <div class="flex text-premium-gold">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+              </div>
+              <div class="text-xs text-muted">1 month ago</div>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="premium-card rounded-2xl p-8 shadow-card hover:shadow-premium transition-all duration-500 fade-in group">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="relative">
+                <img src="https://i.pravatar.cc/60?img=68" alt="Emma" class="w-14 h-14 rounded-full">
+                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-premium-gold rounded-full flex items-center justify-center">
+                  <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <div class="font-bold text-navy">Emma Wilson</div>
+                <div class="text-sm text-muted">Operations Director, SeniorLiving Group</div>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="text-6xl text-tc/20 absolute -top-4 -left-2 font-serif">"</div>
+              <p class="text-navy relative z-10 italic leading-relaxed">
+                Implementation was seamless with their dedicated support team. Our staff adapted quickly to the intuitive interface.
+              </p>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between">
+              <div class="flex text-premium-gold">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 0"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+              </div>
+              <div class="text-xs text-muted">3 weeks ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREMIUM WORKFLOW - UPDATED WITH CENTERED CONNECTOR -->
+    <section id="workflow" class="py-24 bg-white relative overflow-hidden">
+      <!-- Background Elements -->
+      <div class="absolute top-1/2 left-0 w-1/3 h-1/3 bg-tc-50 rounded-full -translate-y-1/2 -translate-x-1/2 blur-3xl opacity-40"></div>
+      <div class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-tc-100 rounded-full translate-y-1/2 translate-x-1/2 blur-3xl opacity-30"></div>
+      
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16 fade-in">
+          <span class="premium-badge px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-4 inline-block">SEAMLESS WORKFLOW</span>
+          <h2 class="text-4xl md:text-5xl font-serif font-bold mb-6">The <span class="gradient-text">TechlyCare </span> Experience</h2>
+          <p class="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
+            Our intuitive workflow guides your team through daily operations with elegance and efficiency.
+          </p>
+        </div>
+
+        <div class="relative">
+          <!-- Steps Container -->
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+            <!-- Step 1 -->
+            <div class="workflow-step flex flex-col items-center text-center group fade-in">
+              <div class="w-20 h-20 rounded-full bg-gradient-premium flex items-center justify-center text-white font-bold text-xl mb-6 shadow-premium transform transition-all duration-500 group-hover:scale-110 group-hover:shadow-glow">
+                1
+              </div>
+              <h3 class="font-bold text-xl mb-3">Dashboard</h3>
+              <p class="text-muted text-sm leading-relaxed">Personalized overview of daily tasks, alerts, and key metrics.</p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="workflow-step flex flex-col items-center text-center group fade-in">
+              <div class="w-20 h-20 rounded-full bg-gradient-premium flex items-center justify-center text-white font-bold text-xl mb-6 shadow-premium transform transition-all duration-500 group-hover:scale-110 group-hover:shadow-glow">
+                2
+              </div>
+              <h3 class="font-bold text-xl mb-3">Residents</h3>
+              <p class="text-muted text-sm leading-relaxed">Comprehensive care plans and digital records for each resident.</p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="workflow-step flex flex-col items-center text-center group fade-in">
+              <div class="w-20 h-20 rounded-full bg-gradient-premium flex items-center justify-center text-white font-bold text-xl mb-6 shadow-premium transform transition-all duration-500 group-hover:scale-110 group-hover:shadow-glow">
+                3
+              </div>
+              <h3 class="font-bold text-xl mb-3">Medication</h3>
+              <p class="text-muted text-sm leading-relaxed">Secure administration with barcode verification and audit trails.</p>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="workflow-step flex flex-col items-center text-center group fade-in">
+              <div class="w-20 h-20 rounded-full bg-gradient-premium flex items-center justify-center text-white font-bold text-xl mb-6 shadow-premium transform transition-all duration-500 group-hover:scale-110 group-hover:shadow-glow">
+                4
+              </div>
+              <h3 class="font-bold text-xl mb-3">Reporting</h3>
+              <p class="text-muted text-sm leading-relaxed">Automated CQC-ready reports and real-time analytics.</p>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="workflow-step flex flex-col items-center text-center group fade-in">
+              <div class="w-20 h-20 rounded-full bg-gradient-premium flex items-center justify-center text-white font-bold text-xl mb-6 shadow-premium transform transition-all duration-500 group-hover:scale-110 group-hover:shadow-glow">
+                5
+              </div>
+              <h3 class="font-bold text-xl mb-3">Insights</h3>
+              <p class="text-muted text-sm leading-relaxed">Actionable intelligence to improve care quality and operations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREMIUM CTA -->
+    <section class="py-24 bg-gradient-to-br from-tc-700 to-tc-900 relative overflow-hidden">
+      <!-- Background Elements -->
+      <div class="absolute top-0 left-0 w-full h-full bg-black/10"></div>
+      <div class="absolute top-10 right-10 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 left-10 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+      
+      <div class="max-w-4xl mx-auto px-6 text-center relative z-10 fade-in">
+        <span class="premium-badge px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-6 inline-block">EXCLUSIVE OFFER</span>
+        <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-6">Ready to Elevate Your Care Home?</h2>
+        <p class="text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
+          Join the  care homes transforming their operations with TechlyCare. Schedule your exclusive demo today.
+        </p>
+        <div class="flex flex-wrap justify-center gap-6">
+          <button id="ctaRequestDemoBtn" class="btn-premium px-10 py-4 rounded-xl text-white font-semibold text-lg bg-white/20 backdrop-blur border border-white/30 hover:bg-white/30 transition-all duration-500">
+            Book Exclusive Demo
+          </button>
+          <a href="tel:+441234567890" class="group inline-flex items-center gap-3 px-8 py-4 rounded-xl border border-white/30 text-white hover:bg-white/10 transition-all duration-300">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+            </svg>
+            <span>+44 1234 567890</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREMIUM CONTACT -->
+    <section id="contact" class="py-24 bg-white relative overflow-hidden">
+      <!-- Background Elements -->
+      <div class="absolute top-0 right-0 w-96 h-96 bg-tc-50 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl opacity-50"></div>
+      
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <!-- Contact Info -->
+          <div class="fade-in">
+            <span class="premium-badge px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-4 inline-block">GET IN TOUCH</span>
+            <h2 class="text-4xl md:text-5xl font-serif font-bold mb-6">Let's Transform Care <span class="gradient-text">Together</span></h2>
+            <p class="text-lg text-muted mb-10 leading-relaxed">
+              Our dedicated team is ready to show you how TechlyCare  can revolutionize your care home management. Schedule your personalized demo today.
+            </p>
+            
+            <div class="space-y-6">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-tc/10 rounded-xl flex items-center justify-center text-tc">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-semibold text-navy">Call Us</div>
+                  <div class="text-muted">+44 1234 567890</div>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-tc/10 rounded-xl flex items-center justify-center text-tc">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-semibold text-navy">Email Us</div>
+                  <div class="text-muted">hello@techlycare.com</div>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-tc/10 rounded-xl flex items-center justify-center text-tc">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-semibold text-navy">Visit Us</div>
+                  <div class="text-muted">123 Care Innovation Street, London, UK</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="fade-in">
+            <div class="premium-card rounded-2xl p-8 shadow-elegant">
+              <div class="demo-form-group">
+                <label class="demo-form-label" for="firstName">First Name *</label>
+                <input type="text" id="firstName" class="demo-form-input" required placeholder="John">
+              </div>
+              
+              <div class="demo-form-group">
+                <label class="demo-form-label" for="lastName">Last Name *</label>
+                <input type="text" id="lastName" class="demo-form-input" required placeholder="Doe">
+              </div>
+              
+              <div class="demo-form-group">
+                <label class="demo-form-label" for="email">Email Address *</label>
+                <input type="email" id="contactEmail" class="demo-form-input" required placeholder="john@example.com">
+              </div>
+              
+              <div class="demo-form-group">
+                <label class="demo-form-label" for="careHomeName">Care Home Name *</label>
+                <input type="text" id="contactCareHomeName" class="demo-form-input" required placeholder="Sunshine Care Home">
+              </div>
+              
+              <button id="contactRequestDemoBtn" class="demo-submit-btn w-full">
+                Request Premium Demo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Enhanced Footer -->
+<footer class="footer-bg text-gray-300 pt-16 pb-8 relative overflow-hidden">
+    <!-- Background Decorations -->
+    <div class="footer-decoration footer-decoration-1"></div>
+    <div class="footer-decoration footer-decoration-2"></div>
+    
+    <div class="max-w-7xl mx-auto px-6 footer-content">
+        <!-- Main Footer Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-12">
+            <!-- Brand & Description -->
+            <div class="lg:col-span-4">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-teal-400" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 21s-6.7-5.2-9.3-9.6C.8 8.4 2.2 3.9 6 3.1c2.2-.5 3.8 1 4.8 2.4 1-1.4 2.6-2.9 4.8-2.4 3.8.8 5.2 5.3 3.3 8.3C18.7 15.8 12 21 12 21z"/>
+                        </svg>
+                        <div class="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"></div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-white">TechlyCare</div>
+                        <div class="text-xs text-teal-300 -mt-0.5 tracking-wider">CARE MANAGEMENT</div>
+                    </div>
+                </div>
+                <p class="text-gray-400 mb-6 leading-relaxed max-w-md">
+                    Modern, compliant care home management software designed to simplify operations and elevate quality of care through elegant technology.
+                </p>
+                
+                <!-- Social Links -->
+                <div class="flex gap-3">
+                    <a href="#" class="social-icon">
+                        <!-- Facebook Icon -->
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <!-- TikTok Icon -->
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 a6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <!-- WhatsApp Icon -->
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893-.001-3.189-1.262-6.189-3.553-8.436"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <!-- LinkedIn Icon -->
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Product Links -->
+            <div class="lg:col-span-2">
+                <h3 class="text-white font-semibold text-lg mb-6 relative inline-block">
+                    Product
+                    <span class="absolute -bottom-1 left-0 w-8 h-0.5 bg-teal-400 rounded-full"></span>
+                </h3>
+                <ul class="space-y-3">
+                    <li><a href="features.html" class="footer-link block text-gray-400">Features</a></li>
+                    <li><a href="pricing.html" class="footer-link block text-gray-400">Pricing</a></li>
+                    <li><a href="contact.html" class="footer-link block text-gray-400">Contact</a></li>
+                </ul>
+            </div>
+            
+            <!-- Company Links -->
+            <div class="lg:col-span-2">
+                <h3 class="text-white font-semibold text-lg mb-6 relative inline-block">
+                    Company
+                    <span class="absolute -bottom-1 left-0 w-8 h-0.5 bg-teal-400 rounded-full"></span>
+                </h3>
+                <ul class="space-y-3">
+                    <li><a href="about.html" class="footer-link block text-gray-400">About us</a></li>
+                    <li><a href="contact.html" class="footer-link block text-gray-400">Contact</a></li>
+                    <li><a href="#" class="footer-link block text-gray-400">Careers</a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <!-- Contact Info -->
+            <div class="lg:col-span-2">
+                <h3 class="text-white font-semibold text-lg mb-6 relative inline-block">
+                    Contact
+                    <span class="absolute -bottom-1 left-0 w-8 h-0.5 bg-teal-400 rounded-full"></span>
+                </h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                        </svg>
+                        <span class="text-gray-400">+44 1234 567890</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="text-gray-400">hello@techlycare.com</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span class="text-gray-400">123 Care Innovation Street, London, UK</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Divider -->
+        <div class="footer-divider my-8"></div>
+        
+        <!-- Bottom Section with Centered Copyright -->
+        <div class="flex flex-col items-center text-center">
+            <div class="text-sm text-gray-400 mb-4">
+                © <span id="year">2025</span> TechlyCare. All rights reserved.
+            </div>
+        </div>
+    </div>
+</footer>
+      
+      
+
+   <!-- Scroll to top button -->
+  <div id="scrollToTop" class="scroll-to-top">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+    </svg>
+  </div>
+
+  <!-- SCRIPTS -->
+<script>
+  // Demo Request Modal Elements
+  const demoModal = document.getElementById('demoModal');
+  const closeDemoModal = document.getElementById('closeDemoModal');
+  const demoForm = document.getElementById('demoForm');
+  const submitDemoForm = document.getElementById('submitDemoForm');
+  const submitText = document.getElementById('submitText');
+  const submitLoading = document.getElementById('submitLoading');
+  
+  // Success Modal Elements
+  const successModal = document.getElementById('successModal');
+  const successOkBtn = document.getElementById('successOkBtn');
+  
+  // Demo Request Modal Functions
+  function openDemoModal() {
+    demoModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeDemoModalFunc() {
+    demoModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+  
+  // Success Modal Functions
+  function openSuccessModal() {
+    successModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeSuccessModalFunc() {
+    successModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+  
+  // Redirect to pricing page with module selection
+  function redirectToPricingPage() {
+    // If the pricing page exists in the same directory
+    window.location.href = 'pricing.html#module-selection';
+  }
+  
+  // Demo Modal Event Listeners
+  if (demoModal && closeDemoModal) {
+    closeDemoModal.addEventListener('click', closeDemoModalFunc);
+    
+    // Close modal when clicking outside
+    demoModal.addEventListener('click', (e) => {
+      if (e.target === demoModal) {
+        closeDemoModalFunc();
+      }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && demoModal.classList.contains('active')) {
+        closeDemoModalFunc();
+      }
+    });
+  }
+  
+  // Success Modal Event Listeners
+  if (successModal && successOkBtn) {
+    successOkBtn.addEventListener('click', () => {
+      closeSuccessModalFunc();
+      redirectToPricingPage();
+    });
+    
+    // Close success modal when clicking outside
+    successModal.addEventListener('click', (e) => {
+      if (e.target === successModal) {
+        closeSuccessModalFunc();
+        redirectToPricingPage();
+      }
+    });
+    
+    // Close success modal with Escape key and redirect
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && successModal.classList.contains('active')) {
+        closeSuccessModalFunc();
+        redirectToPricingPage();
+      }
+    });
+  }
+  
+  // Demo Form Submission
+  if (demoForm) {
+    demoForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Get form data
+      const formData = {
+        fullName: document.getElementById('fullName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        careHomeName: document.getElementById('careHomeName').value,
+        residentCount: document.getElementById('residentCount').value,
+        jobTitle: document.getElementById('jobTitle').value,
+        message: document.getElementById('message').value,
+        agreeTerms: document.getElementById('agreeTerms').checked
+      };
+      
+      // Validate required fields
+      if (!formData.fullName || !formData.email || !formData.phone || !formData.careHomeName || !formData.agreeTerms) {
+        alert('Please fill in all required fields and agree to the terms.');
+        return;
+      }
+      
+      // Show loading state
+      submitText.classList.add('hidden');
+      submitLoading.classList.remove('hidden');
+      submitDemoForm.disabled = true;
+      
+      try {
+        // In a real application, you would send this data to your server
+        // Simulate API call with timeout
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Store form data in localStorage for potential use on pricing page
+        localStorage.setItem('demoRequestData', JSON.stringify({
+          ...formData,
+          submittedAt: new Date().toISOString()
+        }));
+        
+        // Close demo modal
+        closeDemoModalFunc();
+        
+        // Reset form
+        demoForm.reset();
+        
+        // Open success modal
+        setTimeout(() => {
+          openSuccessModal();
+        }, 300);
+        
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('There was an error submitting your request. Please try again.');
+      } finally {
+        // Reset button state
+        submitText.classList.remove('hidden');
+        submitLoading.classList.add('hidden');
+        submitDemoForm.disabled = false;
+      }
+    });
+  }
+  
+  // Request Demo Button Event Listeners (All buttons on the page)
+  const requestDemoBtns = [
+    document.getElementById('requestDemoBtn'),
+    document.getElementById('mobileRequestDemoBtn'),
+    document.getElementById('heroRequestDemoBtn'),
+    document.getElementById('dashboardRequestDemoBtn'),
+    document.getElementById('ctaRequestDemoBtn'),
+    document.getElementById('contactRequestDemoBtn')
+  ];
+  
+  requestDemoBtns.forEach(btn => {
+    if (btn) {
+      btn.addEventListener('click', openDemoModal);
+    }
+  });
+
+  // Contact form simplified submission
+  const contactRequestDemoBtn = document.getElementById('contactRequestDemoBtn');
+  if (contactRequestDemoBtn) {
+    contactRequestDemoBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // Get contact form data
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = document.getElementById('contactEmail').value;
+      const careHomeName = document.getElementById('contactCareHomeName').value;
+      
+      if (!firstName || !lastName || !email || !careHomeName) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      
+      // Pre-fill the demo modal with contact form data
+      document.getElementById('fullName').value = `${firstName} ${lastName}`;
+      document.getElementById('email').value = email;
+      document.getElementById('careHomeName').value = careHomeName;
+      
+      // Open the demo modal
+      openDemoModal();
+    });
+  }
+
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn?.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+  // Fade-in intersection observer
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('is-visible');
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+  // Set current year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Scroll to top functionality
+  const scrollToTopBtn = document.getElementById('scrollToTop');
+  
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      scrollToTopBtn.classList.add('visible');
+    } else {
+      scrollToTopBtn.classList.remove('visible');
+    }
+  });
+  
+  scrollToTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Animate progress bars
+  document.querySelectorAll('.progress-bar').forEach(bar => {
+    const width = bar.style.width;
+    bar.style.width = '0';
+    setTimeout(() => {
+      bar.style.width = width;
+    }, 300);
+  });
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        window.scrollTo({
+          top: target.offsetTop - 100,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+
+  // Add loading animation to page
+  document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('loaded');
+    
+    // Initialize any interactive elements
+    const featureCards = document.querySelectorAll('.feature-card');
+    featureCards.forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px)';
+      });
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+  });
+</script>
+</body>
+</html>

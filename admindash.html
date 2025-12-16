@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-500">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechlyCare Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            tc: { 
+              DEFAULT: '#0ea5a9', 
+              50: '#f0fdfa', 
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              500: '#0ea5a9',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a'
+            }
+          },
+          fontFamily: { 
+            sans: ['Inter','ui-sans-serif','system-ui'],
+            serif: ['Playfair Display', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.7s forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .enhanced-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    }
+    
+    .enhanced-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+    }
+    
+    .enhanced-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px rgba(14, 165, 169, 0.15);
+    }
+    
+    .dark .enhanced-card {
+      background: linear-gradient(145deg, #1e293b 0%, #0f1724 100%);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .btn-premium {
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 100%);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .btn-premium::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.7s ease;
+    }
+    .btn-premium:hover::before {
+      left: 100%;
+    }
+    .btn-premium:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(14,165,169,0.3);
+    }
+    
+    .elegant-underline {
+      position: relative;
+    }
+    .elegant-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+      border-radius: 2px;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.85);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .dark .glass-effect {
+      background: rgba(15, 23, 36, 0.85);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .sidebar {
+      background: linear-gradient(180deg, #0ea5a9 0%, #0d9488 100%);
+    }
+    
+    .dark .sidebar {
+      background: linear-gradient(180deg, #0f766e 0%, #115e59 100%);
+    }
+    
+    .toggle-bg {
+      background-color: #cbd5e0;
+    }
+    
+    .dark .toggle-bg {
+      background-color: #4a5568;
+    }
+    
+    .toggle-dot {
+      background-color: #ffffff;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    input:checked + .toggle-dot {
+      transform: translateX(100%);
+      background-color: #ffffff;
+    }
+    
+    input:checked ~ .toggle-bg {
+      background-color: #0ea5a9;
+    }
+    
+    .settings-tab {
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .settings-tab.active {
+      border-bottom-color: #0ea5a9;
+      color: #0ea5a9;
+    }
+    
+    .dark .settings-tab.active {
+      color: #2dd4bf;
+    }
+    
+    .avatar-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 100%);
+      color: white;
+      font-weight: bold;
+    }
+    
+    .progress-container {
+      background-color: #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 10px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+      border-radius: 10px;
+      transition: width 1s ease-in-out;
+    }
+    
+    .dark .progress-container {
+      background-color: #374151;
+    }
+    
+    .stat-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 35px rgba(14, 165, 169, 0.15);
+    }
+    
+    .dark .stat-card {
+      background: linear-gradient(145deg, #1e293b 0%, #0f1724 100%);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .icon-container {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card:hover .icon-container {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .module-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid #e5e7eb;
+    }
+    
+    .module-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border-color: #0ea5a9;
+    }
+    
+    .module-card.active {
+      border-color: #0ea5a9;
+      background-color: rgba(14, 165, 169, 0.05);
+      box-shadow: 0 5px 15px rgba(14, 165, 169, 0.1);
+    }
+    
+    .hover-lift {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .hover-lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+    
+    .premium-badge {
+      background: linear-gradient(135deg, #d4af37 0%, #f7ef8a 100%);
+      color: #0f1724;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 50%, #0d9488 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .table-row {
+      transition: all 0.3s ease;
+    }
+    
+    .table-row:hover {
+      background-color: rgba(14, 165, 169, 0.05);
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .status-active {
+      background-color: rgba(34, 197, 94, 0.1);
+      color: rgb(21, 128, 61);
+    }
+    
+    .status-expiring {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: rgb(180, 83, 9);
+    }
+    
+    .status-expired {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: rgb(185, 28, 28);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 600px;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+    
+    .dark .modal-content {
+      background: #1e293b;
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .dark .modal-header {
+      border-bottom: 1px solid #374151;
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    .dark .modal-footer {
+      border-top: 1px solid #374151;
+    }
+    
+    .slide-over {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    
+    .slide-over.active {
+      transform: translateX(0);
+    }
+    
+    .dark .slide-over {
+      background: #1e293b;
+    }
+    
+    .slide-over-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .dark .slide-over-header {
+      border-bottom: 1px solid #374151;
+    }
+    
+    .slide-over-body {
+      padding: 1.5rem;
+    }
+    
+    .tab-button {
+      padding: 0.75rem 1rem;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .tab-button.active {
+      border-bottom-color: #0ea5a9;
+      color: #0ea5a9;
+    }
+    
+    .dark .tab-button.active {
+      color: #2dd4bf;
+    }
+    
+    /* Mobile responsive styles */
+    @media (max-width: 1023px) {
+      .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        height: 100%;
+        z-index: 50;
+        transition: left 0.3s ease;
+        width: 280px;
+      }
+      
+      .sidebar.active {
+        left: 0;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .main-content {
+        width: 100%;
+      }
+      
+      .page-title {
+        text-align: center;
+        width: 100%;
+      }
+      
+      .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        display: none;
+      }
+      
+      .mobile-menu-overlay.active {
+        display: block;
+      }
+      
+      /* Improved mobile top navbar */
+      .top-navbar-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.5rem 0;
+      }
+      
+      .mobile-header-content {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+      }
+      
+      .mobile-title-container {
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+      }
+      
+      .mobile-title-container h1 {
+        font-size: 1.5rem;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0 auto;
+      }
+      
+      .mobile-title-container p {
+        font-size: 0.875rem;
+        line-height: 1.2;
+      }
+      
+      .mobile-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .mobile-profile-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .mobile-title-container h1 {
+        font-size: 1.25rem;
+      }
+      
+      .mobile-title-container p {
+        font-size: 0.75rem;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .sidebar {
+        position: static;
+      }
+      
+      .mobile-menu-btn {
+        display: none;
+      }
+      
+      .mobile-menu-overlay {
+        display: none;
+      }
+      
+      .top-navbar-mobile {
+        display: none;
+      }
+    }
+
+    /* Logout modal styles */
+    .logout-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .logout-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .logout-modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 400px;
+      width: 90%;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dark .logout-modal-content {
+      background: #1e293b;
+    }
+    
+    .logout-modal.active .logout-modal-content {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans transition-colors duration-500">
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="logout-modal" id="logout-modal">
+    <div class="logout-modal-content">
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
+          <i class="fas fa-sign-out-alt text-red-500 text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">Logout</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Are you sure you want to log out?</p>
+        <div class="flex space-x-4">
+          <button class="flex-1 py-2 rounded-lg border border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" id="cancel-logout">
+            Cancel
+          </button>
+          <button class="flex-1 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors" id="confirm-logout">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="flex h-screen">
+    <aside class="w-64 sidebar text-white flex flex-col transition-colors duration-500" id="sidebar">
+      <div class="p-6 text-2xl font-bold flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21s-6.7-5.2-9.3-9.6C.8 8.4 2.2 3.9 6 3.1c2.2-.5 3.8 1 4.8 2.4 1-1.4 2.6-2.9 4.8-2.4 3.8.8 5.2 5.3 3.3 8.3C18.7 15.8 12 21 12 21z"/>
+          </svg>
+          <span>TechlyCare</span>
+        </div>
+        <button class="lg:hidden text-white" id="close-sidebar" title="Close sidebar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="flex-1 px-4 py-2">
+        <ul>
+          <li class="my-2"><a href="admindash.html" class="block px-4 py-3 rounded-lg bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-tachometer-alt w-5 text-center"></i> Dashboard</a></li>
+          <li class="my-2"><a href="admin_subcribe.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-users w-5 text-center"></i> Subscribers</a></li>
+          <li class="my-2"><a href="admin_shedule.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-calendar-alt w-5 text-center"></i> Schedules</a></li>
+          <li class="my-2"><a href="admin_plan.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-crown w-5 text-center"></i> Plans</a></li>
+          <li class="my-2"><a href="admin_analysic.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-chart-bar w-5 text-center"></i> Analytics</a></li>
+          <li class="my-2"><a href="admin_setting.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-cog w-5 text-center"></i> Settings</a></li>
+        </ul>
+      </nav>
+      <div class="p-6 border-t border-white/20">
+        <div class="flex items-center space-x-3 mb-4">
+          <!-- Profile Image with Fallback -->
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+               alt="User" 
+               class="rounded-full border-2 border-white w-10 h-10 object-cover"
+               onerror="this.style.display='none'; document.getElementById('avatar-fallback').style.display='flex';">
+          
+          <!-- Fallback avatar with initials -->
+          <div id="avatar-fallback" class="avatar-placeholder rounded-full border-2 border-white w-10 h-10 hidden">
+            AD
+          </div>
+          
+          <div>
+            <span class="font-medium">Admin User</span>
+            <p class="text-xs text-white/70">Administrator</p>
+          </div>
+        </div>
+        <!-- Logout Button in Sidebar -->
+        <button id="logout-btn-sidebar" class="w-full mt-4 px-4 py-3 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-300 flex items-center gap-3 text-white">
+          <i class="fas fa-sign-out-alt w-5 text-center"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-4 lg:p-6 overflow-auto main-content">
+
+      <!-- Mobile Top Navbar -->
+      <div class="lg:hidden mb-6 top-navbar-mobile">
+        <div class="mobile-header-content">
+          <button class="mobile-menu-btn mr-3 glass-effect p-2 rounded-lg text-gray-800 dark:text-gray-100" id="open-sidebar" title="Open sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="mobile-title-container">
+            <h1 class="font-bold font-serif text-gray-800 dark:text-gray-100 elegant-underline">Manage All</h1>
+            <p class="text-gray-600 dark:text-gray-400">Manage subscribers & track validity</p>
+          </div>
+          <div class="mobile-actions">
+            <!-- Dark Mode Toggle in Mobile -->
+            <button id="theme-toggle-mobile" class="glass-effect p-2 rounded-lg transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">
+              🌙
+            </button>
+            
+            <!-- Notification Bell in Mobile -->
+            <button class="relative glass-effect p-2 rounded-lg transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+              </svg>
+              <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">3</span>
+            </button>
+            
+            <!-- Profile image in mobile navbar -->
+            <div class="mobile-profile-container">
+              <div class="relative">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+                     alt="User" 
+                     class="rounded-full border-2 border-tc w-8 h-8 object-cover"
+                     onerror="this.style.display='none'; document.getElementById('mobile-navbar-avatar-fallback').style.display='flex';">
+                <div id="mobile-navbar-avatar-fallback" class="avatar-placeholder rounded-full border-2 border-tc w-8 h-8 hidden text-xs">
+                  AD
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Top Navbar -->
+      <div class="hidden lg:flex justify-between items-center mb-8">
+        <div class="flex items-center">
+          <button class="mobile-menu-btn mr-4 glass-effect p-3 rounded-xl transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100 lg:hidden" id="open-sidebar-desktop" title="Open sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="page-title">
+            <h1 class="text-3xl font-bold font-serif text-gray-800 dark:text-gray-100 elegant-underline inline-block">Manage All</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Manage subscribers, track validity, and handle reactivations</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button id="theme-toggle" class="glass-effect p-3 rounded-xl transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">🌙</button>
+          <button class="relative glass-effect p-3 rounded-xl transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">3</span>
+          </button>
+          <div class="flex items-center space-x-3 glass-effect p-2 rounded-xl">
+            <!-- Profile image in top navbar with fallback -->
+            <div class="relative">
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+                   alt="User" 
+                   class="rounded-full border-2 border-tc w-10 h-10 object-cover"
+                   onerror="this.style.display='none'; document.getElementById('navbar-avatar-fallback').style.display='flex';">
+              <div id="navbar-avatar-fallback" class="avatar-placeholder rounded-full border-2 border-tc w-10 h-10 hidden">
+                AD
+              </div>
+            </div>
+            <div class="hidden md:block">
+              <p class="font-medium text-gray-800 dark:text-gray-100">Admin User</p>
+              <p class="text-xs text-gray-600 dark:text-gray-400">Administrator</p>
+            </div>
+            <!-- Logout Button in Top Navbar (Mobile) -->
+            <button id="logout-btn-navbar" class="md:hidden text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors" title="Logout">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Overview -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 mb-6 lg:mb-8">
+        <div class="stat-card fade-in">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Total Subscribers</p>
+              <h3 class="text-xl lg:text-2xl font-bold mt-1 text-gray-800 dark:text-gray-100">142</h3>
+            </div>
+            <div class="icon-container bg-tc/10 text-tc">
+              <i class="fas fa-users text-lg lg:text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm text-green-500">
+            <i class="fas fa-arrow-up mr-1"></i>
+            <span>+12% from last month</span>
+          </div>
+        </div>
+        
+        <div class="stat-card fade-in" style="animation-delay: 0.1s">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Active</p>
+              <h3 class="text-xl lg:text-2xl font-bold mt-1 text-gray-800 dark:text-gray-100">95</h3>
+            </div>
+            <div class="icon-container bg-green-500/10 text-green-500">
+              <i class="fas fa-check-circle text-lg lg:text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm text-green-500">
+            <i class="fas fa-arrow-up mr-1"></i>
+            <span>+5 this month</span>
+          </div>
+        </div>
+        
+        <div class="stat-card fade-in" style="animation-delay: 0.2s">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Expired</p>
+              <h3 class="text-xl lg:text-2xl font-bold mt-1 text-gray-800 dark:text-gray-100">20</h3>
+            </div>
+            <div class="icon-container bg-red-500/10 text-red-500">
+              <i class="fas fa-times-circle text-lg lg:text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm text-red-500">
+            <i class="fas fa-arrow-up mr-1"></i>
+            <span>+3 this month</span>
+          </div>
+        </div>
+        
+        <div class="stat-card fade-in" style="animation-delay: 0.3s">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Expiring Soon</p>
+              <h3 class="text-xl lg:text-2xl font-bold mt-1 text-gray-800 dark:text-gray-100">5</h3>
+            </div>
+            <div class="icon-container bg-amber-500/10 text-amber-500">
+              <i class="fas fa-exclamation-triangle text-lg lg:text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm text-amber-500">
+            <i class="fas fa-clock mr-1"></i>
+            <span>Within 7 days</span>
+          </div>
+        </div>
+        
+        <div class="stat-card fade-in" style="animation-delay: 0.4s">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Reactivations</p>
+              <h3 class="text-xl lg:text-2xl font-bold mt-1 text-gray-800 dark:text-gray-100">10</h3>
+            </div>
+            <div class="icon-container bg-blue-500/10 text-blue-500">
+              <i class="fas fa-redo text-lg lg:text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm text-green-500">
+            <i class="fas fa-arrow-up mr-1"></i>
+            <span>+2 this week</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters & Actions Bar -->
+      <div class="enhanced-card p-4 lg:p-6 mb-4 lg:mb-6 fade-in">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex flex-wrap gap-2">
+            <div class="flex items-center space-x-2">
+              <span class="text-sm text-gray-600 dark:text-gray-400">Status:</span>
+              <select class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800">
+                <option>All</option>
+                <option>Active</option>
+                <option>Expired</option>
+                <option>Expiring Soon</option>
+                <option>Reactivated</option>
+              </select>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm text-gray-600 dark:text-gray-400">Plan:</span>
+              <select class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800">
+                <option>All</option>
+                <option>Basic</option>
+                <option>Standard</option>
+                <option>Premium</option>
+              </select>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm text-gray-600 dark:text-gray-400">Bulk Actions:</span>
+              <select class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800">
+                <option>Select Action</option>
+                <option>Reactivate</option>
+                <option>Delete</option>
+                <option>Export</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="relative">
+              <input type="text" placeholder="Search by name/email" class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 w-full md:w-64">
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+            <button class="btn-premium px-4 py-2 rounded-lg text-white font-medium">Search</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subscribers Table -->
+      <div class="enhanced-card p-4 lg:p-6 fade-in">
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[800px]">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Name</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Email</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Plan</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Validity</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Days Left</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Status</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Reactivation Date</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Schedule</th>
+                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row border-b border-gray-100 dark:border-gray-800">
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-8 h-8 mr-3 text-xs">JD</div>
+                    <span>John Doe</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">john@example.com</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 bg-tc/10 text-tc rounded-full text-xs">Premium</span>
+                </td>
+                <td class="py-3 px-4">01/01 - 01/31</td>
+                <td class="py-3 px-4">5</td>
+                <td class="py-3 px-4">
+                  <span class="status-badge status-expiring">Expiring Soon</span>
+                </td>
+                <td class="py-3 px-4">N/A</td>
+                <td class="py-3 px-4">Morning Care</td>
+                <td class="py-3 px-4">
+                  <div class="flex space-x-2">
+                    <button class="text-tc hover:text-tc-700 view-subscriber" data-id="1">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-800 reactivate-subscriber" data-id="1">
+                      <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="text-blue-600 hover:text-blue-800 schedule-subscriber" data-id="1">
+                      <i class="fas fa-calendar-plus"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="table-row border-b border-gray-100 dark:border-gray-800">
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-8 h-8 mr-3 text-xs">SS</div>
+                    <span>Sarah Smith</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">sarah@example.com</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Basic</span>
+                </td>
+                <td class="py-3 px-4">02/01 - 02/28</td>
+                <td class="py-3 px-4">0</td>
+                <td class="py-3 px-4">
+                  <span class="status-badge status-expired">Expired</span>
+                </td>
+                <td class="py-3 px-4">03/10/2025</td>
+                <td class="py-3 px-4">Evening Care</td>
+                <td class="py-3 px-4">
+                  <div class="flex space-x-2">
+                    <button class="text-tc hover:text-tc-700 view-subscriber" data-id="2">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-800 reactivate-subscriber" data-id="2">
+                      <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="text-blue-600 hover:text-blue-800 schedule-subscriber" data-id="2">
+                      <i class="fas fa-calendar-plus"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="table-row border-b border-gray-100 dark:border-gray-800">
+                <td class="py-3 px-4">
+                  <div class="flex items-center">
+                    <div class="avatar-placeholder rounded-full w-8 h-8 mr-3 text-xs">ML</div>
+                    <span>Michael Lee</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4">michael@example.com</td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Standard</span>
+                </td>
+                <td class="py-3 px-4">02/12 - 03/12</td>
+                <td class="py-3 px-4">12</td>
+                <td class="py-3 px-4">
+                  <span class="status-badge status-active">Active</span>
+                </td>
+                <td class="py-3 px-4">N/A</td>
+                <td class="py-3 px-4">Full Day Care</td>
+                <td class="py-3 px-4">
+                  <div class="flex space-x-2">
+                    <button class="text-tc hover:text-tc-700 view-subscriber" data-id="3">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-800 reactivate-subscriber" data-id="3">
+                      <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="text-blue-600 hover:text-blue-800 schedule-subscriber" data-id="3">
+                      <i class="fas fa-calendar-plus"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="flex justify-between items-center mt-6">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            Showing 1 to 3 of 142 subscribers
+          </div>
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm">Previous</button>
+            <button class="px-3 py-1 bg-tc text-white rounded-lg text-sm">1</button>
+            <button class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm">2</button>
+            <button class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm">3</button>
+            <button class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mt-6 lg:mt-8">
+        <div class="enhanced-card p-4 lg:p-6 fade-in">
+          <h2 class="text-lg lg:text-xl font-semibold font-serif mb-4 lg:mb-6 text-gray-800 dark:text-gray-100">Subscriber Trends</h2>
+          <div class="chart-container" style="height: 250px; lg:height: 300px;">
+            <canvas id="trendsChart"></canvas>
+          </div>
+        </div>
+        <div class="enhanced-card p-4 lg:p-6 fade-in">
+          <h2 class="text-lg lg:text-xl font-semibold font-serif mb-4 lg:mb-6 text-gray-800 dark:text-gray-100">Plan Distribution</h2>
+          <div class="chart-container" style="height: 250px; lg:height: 300px;">
+            <canvas id="plansChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subscriber Slide-over Panel -->
+  <div class="slide-over" id="subscriber-panel">
+    <div class="slide-over-header">
+      <h3 class="text-xl font-semibold font-serif text-gray-800 dark:text-gray-100">Subscriber Details</h3>
+      <button class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" id="close-panel">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="slide-over-body">
+      <div class="flex items-center mb-6">
+        <div class="avatar-placeholder rounded-full w-16 h-16 mr-4 text-xl">JD</div>
+        <div>
+          <h4 class="text-lg font-bold text-gray-800 dark:text-gray-100">John Doe</h4>
+          <p class="text-gray-600 dark:text-gray-400">Premium Plan</p>
+        </div>
+      </div>
+      
+      <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+        <div class="tab-button active" data-tab="overview">Overview</div>
+        <div class="tab-button" data-tab="history">Subscription History</div>
+        <div class="tab-button" data-tab="schedules">Schedules</div>
+        <div class="tab-button" data-tab="notes">Notes</div>
+      </div>
+      
+      <div id="overview-tab" class="tab-content active">
+        <div class="space-y-4">
+          <div>
+            <label class="text-sm text-gray-600 dark:text-gray-400">Email</label>
+            <p class="font-medium">john@example.com</p>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 dark:text-gray-400">Phone</label>
+            <p class="font-medium">+1 (555) 123-4567</p>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 dark:text-gray-400">Address</label>
+            <p class="font-medium">123 Main St, Anytown, USA</p>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 dark:text-gray-400">Validity</label>
+            <p class="font-medium">Jan 1, 2025 - Jan 31, 2025</p>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 dark:text-gray-400">Days Remaining</label>
+            <p class="font-medium">5 days</p>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 dark:text-gray-400">Status</label>
+            <span class="status-badge status-expiring">Expiring Soon</span>
+          </div>
+        </div>
+      </div>
+      
+      <div id="history-tab" class="tab-content hidden">
+        <div class="space-y-4">
+          <div class="p-4 bg-tc/5 rounded-xl">
+            <div class="flex justify-between">
+              <span class="font-medium">Premium Plan</span>
+              <span class="text-sm text-gray-600">Jan 1, 2025 - Jan 31, 2025</span>
+            </div>
+            <p class="text-sm text-gray-600 mt-1">Active</p>
+          </div>
+          <div class="p-4 bg-tc/5 rounded-xl">
+            <div class="flex justify-between">
+              <span class="font-medium">Standard Plan</span>
+              <span class="text-sm text-gray-600">Dec 1, 2024 - Dec 31, 2024</span>
+            </div>
+            <p class="text-sm text-gray-600 mt-1">Reactivated on Jan 10, 2025</p>
+          </div>
+        </div>
+      </div>
+      
+      <div id="schedules-tab" class="tab-content hidden">
+        <div class="space-y-4">
+          <div class="p-4 bg-tc/5 rounded-xl">
+            <div class="flex justify-between">
+              <span class="font-medium">Morning Care</span>
+              <span class="text-sm text-gray-600">Mon, Wed, Fri</span>
+            </div>
+            <p class="text-sm text-gray-600 mt-1">9:00 AM - 12:00 PM</p>
+          </div>
+          <div class="p-4 bg-tc/5 rounded-xl">
+            <div class="flex justify-between">
+              <span class="font-medium">Therapy Session</span>
+              <span class="text-sm text-gray-600">Tuesday</span>
+            </div>
+            <p class="text-sm text-gray-600 mt-1">2:00 PM - 3:00 PM</p>
+          </div>
+        </div>
+      </div>
+      
+      <div id="notes-tab" class="tab-content hidden">
+        <div class="space-y-4">
+          <div class="p-4 bg-tc/5 rounded-xl">
+            <p class="text-sm">Requires special attention during morning routines. Prefers warm beverages.</p>
+            <p class="text-xs text-gray-600 mt-2">Added by Nurse Jane on Jan 15, 2025</p>
+          </div>
+          <div class="p-4 bg-tc/5 rounded-xl">
+            <p class="text-sm">Allergic to penicillin. Medication schedule strictly followed.</p>
+            <p class="text-xs text-gray-600 mt-2">Added by Dr. Smith on Jan 5, 2025</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex space-x-3 mt-8">
+        <button class="flex-1 py-2 rounded-lg border border-tc text-tc font-medium hover:bg-tc/5 transition-colors duration-300">
+          Edit
+        </button>
+        <button class="flex-1 py-2 rounded-lg btn-premium text-white font-medium reactivate-subscriber" data-id="1">
+          Reactivate
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reactivation Modal -->
+  <div class="modal-overlay" id="reactivation-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="text-xl font-semibold font-serif text-gray-800 dark:text-gray-100">Reactivate Subscriber</h3>
+        <button class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" id="close-reactivation-modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Plan</label>
+            <select class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800">
+              <option>Basic Plan</option>
+              <option>Standard Plan</option>
+              <option selected>Premium Plan</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Validity Start</label>
+              <input type="date" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800" value="2025-02-01">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Validity End</label>
+              <input type="date" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800" value="2025-02-28">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reactivation Date</label>
+            <input type="date" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800" value="2025-01-28" readonly>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes (Optional)</label>
+            <textarea class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800" rows="3" placeholder="Add any notes about this reactivation..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-300" id="cancel-reactivation">
+          Cancel
+        </button>
+        <button class="px-4 py-2 rounded-lg btn-premium text-white font-medium">
+          Confirm Reactivation
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule Modal -->
+  <div class="modal-overlay" id="schedule-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="text-xl font-semibold font-serif text-gray-800 dark:text-gray-100">Assign Schedule</h3>
+        <button class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" id="close-schedule-modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subscriber</label>
+            <p class="font-medium">John Doe</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
+              <input type="date" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800" value="2025-01-30">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Time</label>
+              <input type="time" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800" value="09:00">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Schedule Type</label>
+            <select class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800">
+              <option>Morning Care</option>
+              <option>Evening Care</option>
+              <option>Full Day Care</option>
+              <option>Therapy Session</option>
+              <option>Medication</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
+            <textarea class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800" rows="3" placeholder="Add any notes about this schedule..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-300" id="cancel-schedule">
+          Cancel
+        </button>
+        <button class="px-4 py-2 rounded-lg btn-premium text-white font-medium">
+          Save Schedule
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle functionality for both desktop and mobile
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+    
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      const newIcon = isDark ? '☀️' : '🌙';
+      
+      if (themeToggle) themeToggle.textContent = newIcon;
+      if (themeToggleMobile) themeToggleMobile.textContent = newIcon;
+    }
+    
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
+    
+    if (themeToggleMobile) {
+      themeToggleMobile.addEventListener('click', toggleTheme);
+    }
+
+    // Mobile sidebar functionality
+    const sidebar = document.getElementById('sidebar');
+    const openSidebarBtn = document.getElementById('open-sidebar');
+    const openSidebarDesktopBtn = document.getElementById('open-sidebar-desktop');
+    const closeSidebarBtn = document.getElementById('close-sidebar');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    
+    openSidebarBtn.addEventListener('click', function() {
+      sidebar.classList.add('active');
+      mobileMenuOverlay.classList.add('active');
+    });
+    
+    if (openSidebarDesktopBtn) {
+      openSidebarDesktopBtn.addEventListener('click', function() {
+        sidebar.classList.add('active');
+        mobileMenuOverlay.classList.add('active');
+      });
+    }
+    
+    closeSidebarBtn.addEventListener('click', function() {
+      sidebar.classList.remove('active');
+      mobileMenuOverlay.classList.remove('active');
+    });
+    
+    mobileMenuOverlay.addEventListener('click', function() {
+      sidebar.classList.remove('active');
+      mobileMenuOverlay.classList.remove('active');
+    });
+
+    // Logout functionality
+    const logoutModal = document.getElementById('logout-modal');
+    const logoutBtnSidebar = document.getElementById('logout-btn-sidebar');
+    const logoutBtnNavbar = document.getElementById('logout-btn-navbar');
+    const cancelLogout = document.getElementById('cancel-logout');
+    const confirmLogout = document.getElementById('confirm-logout');
+    
+    // Show logout modal
+    function showLogoutModal() {
+      logoutModal.classList.add('active');
+    }
+    
+    // Hide logout modal
+    function hideLogoutModal() {
+      logoutModal.classList.remove('active');
+    }
+    
+    // Logout action
+    function performLogout() {
+      // In a real application, you would redirect to logout URL or clear session
+      alert('Logging out... Redirecting to login page.');
+      // window.location.href = '/login'; // Uncomment this in a real application
+    }
+    
+    // Event listeners for logout buttons
+    logoutBtnSidebar.addEventListener('click', showLogoutModal);
+    if (logoutBtnNavbar) {
+      logoutBtnNavbar.addEventListener('click', showLogoutModal);
+    }
+    
+    // Event listeners for logout modal
+    cancelLogout.addEventListener('click', hideLogoutModal);
+    confirmLogout.addEventListener('click', performLogout);
+    
+    // Close modal when clicking outside
+    logoutModal.addEventListener('click', function(e) {
+      if (e.target === logoutModal) {
+        hideLogoutModal();
+      }
+    });
+
+    // Initialize Charts
+    document.addEventListener('DOMContentLoaded', function() {
+      // Trends Chart
+      const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+      const trendsChart = new Chart(trendsCtx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'New Subscribers',
+            data: [12, 15, 18, 22, 24, 20, 25, 28, 30, 32, 35, 38],
+            borderColor: '#0ea5a9',
+            backgroundColor: 'rgba(14, 165, 169, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4,
+            pointBackgroundColor: '#0ea5a9',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 5,
+            pointHoverRadius: 7
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                drawBorder: false
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+
+      // Plans Chart
+      const plansCtx = document.getElementById('plansChart').getContext('2d');
+      const plansChart = new Chart(plansCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Basic', 'Standard', 'Premium'],
+          datasets: [{
+            data: [35, 45, 20],
+            backgroundColor: [
+              '#0ea5a9',
+              '#2dd4bf',
+              '#0d9488'
+            ],
+            borderWidth: 0,
+            hoverOffset: 15
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          },
+          cutout: '70%'
+        }
+      });
+    });
+
+    // Modal and Panel functionality
+    const subscriberPanel = document.getElementById('subscriber-panel');
+    const reactivationModal = document.getElementById('reactivation-modal');
+    const scheduleModal = document.getElementById('schedule-modal');
+    
+    // Open subscriber panel
+    document.querySelectorAll('.view-subscriber').forEach(button => {
+      button.addEventListener('click', function() {
+        subscriberPanel.classList.add('active');
+      });
+    });
+    
+    // Close subscriber panel
+    document.getElementById('close-panel').addEventListener('click', function() {
+      subscriberPanel.classList.remove('active');
+    });
+    
+    // Open reactivation modal
+    document.querySelectorAll('.reactivate-subscriber').forEach(button => {
+      button.addEventListener('click', function() {
+        reactivationModal.classList.add('active');
+      });
+    });
+    
+    // Close reactivation modal
+    document.getElementById('close-reactivation-modal').addEventListener('click', function() {
+      reactivationModal.classList.remove('active');
+    });
+    
+    document.getElementById('cancel-reactivation').addEventListener('click', function() {
+      reactivationModal.classList.remove('active');
+    });
+    
+    // Open schedule modal
+    document.querySelectorAll('.schedule-subscriber').forEach(button => {
+      button.addEventListener('click', function() {
+        scheduleModal.classList.add('active');
+      });
+    });
+    
+    // Close schedule modal
+    document.getElementById('close-schedule-modal').addEventListener('click', function() {
+      scheduleModal.classList.remove('active');
+    });
+    
+    document.getElementById('cancel-schedule').addEventListener('click', function() {
+      scheduleModal.classList.remove('active');
+    });
+    
+    // Close modals when clicking outside
+    [reactivationModal, scheduleModal].forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+    });
+    
+    // Tab functionality in subscriber panel
+    document.querySelectorAll('.tab-button').forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active class from all tabs and contents
+        document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        
+        // Add active class to clicked tab
+        this.classList.add('active');
+        
+        // Show corresponding content
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(`${tabId}-tab`).classList.remove('hidden');
+      });
+    });
+
+    // Image error handling - if all external images fail, show fallback avatars
+    window.addEventListener('load', function() {
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        if (!img.complete || img.naturalHeight === 0) {
+          // Image failed to load
+          const fallbackId = img.getAttribute('onerror').match(/document\.getElementById\('([^']+)'\)/)[1];
+          img.style.display = 'none';
+          document.getElementById(fallbackId).style.display = 'flex';
+        }
+      });
+    });
+  </script>
+</body> 
+</html>

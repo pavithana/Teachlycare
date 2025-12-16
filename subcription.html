@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-500">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechlyCare - Subscription</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            tc: { 
+              DEFAULT: '#0ea5a9', 
+              50: '#f0fdfa', 
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              500: '#0ea5a9',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a'
+            }
+          },
+          fontFamily: { 
+            sans: ['Inter','ui-sans-serif','system-ui'],
+            serif: ['Playfair Display', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.7s forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .enhanced-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    }
+    
+    .enhanced-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+    }
+    
+    .enhanced-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px rgba(14, 165, 169, 0.15);
+    }
+    
+    .dark .enhanced-card {
+      background: linear-gradient(145deg, #1e293b 0%, #0f1724 100%);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .btn-premium {
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 100%);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .btn-premium::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.7s ease;
+    }
+    .btn-premium:hover::before {
+      left: 100%;
+    }
+    .btn-premium:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(14,165,169,0.3);
+    }
+    
+    .elegant-underline {
+      position: relative;
+    }
+    .elegant-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+      border-radius: 2px;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.85);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .dark .glass-effect {
+      background: rgba(15, 23, 36, 0.85);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .sidebar {
+      background: linear-gradient(180deg, #0ea5a9 0%, #0d9488 100%);
+    }
+    
+    .dark .sidebar {
+      background: linear-gradient(180deg, #0f766e 0%, #115e59 100%);
+    }
+    
+    .toggle-bg {
+      background-color: #cbd5e0;
+    }
+    
+    .dark .toggle-bg {
+      background-color: #4a5568;
+    }
+    
+    .toggle-dot {
+      background-color: #ffffff;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    input:checked + .toggle-dot {
+      transform: translateX(100%);
+      background-color: #ffffff;
+    }
+    
+    input:checked ~ .toggle-bg {
+      background-color: #0ea5a9;
+    }
+    
+    .settings-tab {
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .settings-tab.active {
+      border-bottom-color: #0ea5a9;
+      color: #0ea5a9;
+    }
+    
+    .dark .settings-tab.active {
+      color: #2dd4bf;
+    }
+    
+    .avatar-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0ea5a9 0%, #2dd4bf 100%);
+      color: white;
+      font-weight: bold;
+    }
+    
+    .progress-container {
+      background-color: #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 10px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+      border-radius: 10px;
+      transition: width 1s ease-in-out;
+    }
+    
+    .dark .progress-container {
+      background-color: #374151;
+    }
+    
+    .stat-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #0ea5a9, #2dd4bf);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 35px rgba(14, 165, 169, 0.15);
+    }
+    
+    .dark .stat-card {
+      background: linear-gradient(145deg, #1e293b 0%, #0f1724 100%);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .icon-container {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .payment-method-card {
+      transition: all 0.3s ease;
+      border: 2px solid #e5e7eb;
+    }
+    
+    .payment-method-card:hover {
+      border-color: #0ea5a9;
+      transform: translateY(-3px);
+    }
+    
+    .payment-method-card.active {
+      border-color: #0ea5a9;
+      background-color: rgba(14, 165, 169, 0.05);
+    }
+    
+    .dark .payment-method-card {
+      border-color: #374151;
+    }
+    
+    .invoice-row:hover {
+      background-color: rgba(14, 165, 169, 0.05);
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .status-paid {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+    }
+    
+    .status-pending {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: #f59e0b;
+    }
+    
+    .status-failed {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+    
+    .current-plan-banner {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+
+    /* Mobile responsive styles */
+    @media (max-width: 1023px) {
+      .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        height: 100%;
+        z-index: 50;
+        transition: left 0.3s ease;
+        width: 280px;
+      }
+      
+      .sidebar.active {
+        left: 0;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .main-content {
+        width: 100%;
+      }
+      
+      .page-title {
+        text-align: center;
+        width: 100%;
+      }
+      
+      .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        display: none;
+      }
+      
+      .mobile-menu-overlay.active {
+        display: block;
+      }
+      
+      /* Improved mobile top navbar */
+      .top-navbar-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.5rem 0;
+      }
+      
+      .mobile-header-content {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+      }
+      
+      .mobile-title-container {
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+      }
+      
+      .mobile-title-container h1 {
+        font-size: 1.5rem;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0 auto;
+      }
+      
+      .mobile-title-container p {
+        font-size: 0.875rem;
+        line-height: 1.2;
+      }
+      
+      .mobile-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .mobile-profile-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .mobile-title-container h1 {
+        font-size: 1.25rem;
+      }
+      
+      .mobile-title-container p {
+        font-size: 0.75rem;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .sidebar {
+        position: static;
+      }
+      
+      .mobile-menu-btn {
+        display: none;
+      }
+      
+      .mobile-menu-overlay {
+        display: none;
+      }
+      
+      .top-navbar-mobile {
+        display: none;
+      }
+    }
+
+    /* Logout modal styles */
+    .logout-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .logout-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .logout-modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 400px;
+      width: 90%;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dark .logout-modal-content {
+      background: #1e293b;
+    }
+    
+    .logout-modal.active .logout-modal-content {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans transition-colors duration-500">
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="logout-modal" id="logout-modal">
+    <div class="logout-modal-content">
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
+          <i class="fas fa-sign-out-alt text-red-500 text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">Logout</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Are you sure you want to log out?</p>
+        <div class="flex space-x-4">
+          <button class="flex-1 py-2 rounded-lg border border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" id="cancel-logout">
+            Cancel
+          </button>
+          <button class="flex-1 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors" id="confirm-logout">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="flex h-screen">
+    <aside class="w-64 sidebar text-white flex flex-col transition-colors duration-500" id="sidebar">
+      <div class="p-6 text-2xl font-bold flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21s-6.7-5.2-9.3-9.6C.8 8.4 2.2 3.9 6 3.1c2.2-.5 3.8 1 4.8 2.4 1-1.4 2.6-2.9 4.8-2.4 3.8.8 5.2 5.3 3.3 8.3C18.7 15.8 12 21 12 21z"/>
+          </svg>
+          <span>TechlyCare</span>
+        </div>
+        <button class="lg:hidden text-white" id="close-sidebar" title="Close Sidebar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="flex-1 px-4 py-2">
+        <ul>
+          <li class="my-2"><a href="subcription.html" class="block px-4 py-3 rounded-lg bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-crown w-5 text-center"></i> Subscription</a></li>
+          <li class="my-2"><a href="biling.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-file-invoice-dollar w-5 text-center"></i> Billing</a></li>
+          <li class="my-2"><a href="seatting.html" class="block px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3"><i class="fas fa-cog w-5 text-center"></i> Settings</a></li>
+        </ul>
+      </nav>
+      <div class="p-6 border-t border-white/20">
+        <div class="flex items-center space-x-3 mb-4">
+          <!-- Profile Image with Fallback -->
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+               alt="User" 
+               class="rounded-full border-2 border-white w-10 h-10 object-cover"
+               onerror="this.style.display='none'; document.getElementById('avatar-fallback').style.display='flex';">
+          
+          <!-- Fallback avatar with initials -->
+          <div id="avatar-fallback" class="avatar-placeholder rounded-full border-2 border-white w-10 h-10 hidden">
+            JD
+          </div>
+          
+          <div>
+            <span class="font-medium">John Doe</span>
+            <p class="text-xs text-white/70">Admin</p>
+          </div>
+        </div>
+        <!-- Logout Button in Sidebar -->
+        <button id="logout-btn-sidebar" class="w-full mt-4 px-4 py-3 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-300 flex items-center gap-3 text-white">
+          <i class="fas fa-sign-out-alt w-5 text-center"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-4 lg:p-6 overflow-auto main-content">
+
+      <!-- Mobile Top Navbar -->
+      <div class="lg:hidden mb-6 top-navbar-mobile">
+        <div class="mobile-header-content">
+          <button class="mobile-menu-btn mr-3 glass-effect p-2 rounded-lg text-gray-800 dark:text-gray-100" id="open-sidebar" title="Open sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="mobile-title-container">
+            <h1 class="font-bold font-serif text-gray-800 dark:text-gray-100 elegant-underline">Subscription</h1>
+            <p class="text-gray-600 dark:text-gray-400">Manage your plan & billing</p>
+          </div>
+          <div class="mobile-actions">
+            <!-- Dark Mode Toggle in Mobile -->
+            <button id="theme-toggle-mobile" class="glass-effect p-2 rounded-lg transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">
+              🌙
+            </button>
+            
+            <!-- Notification Bell in Mobile -->
+            <button class="relative glass-effect p-2 rounded-lg transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+              </svg>
+              <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">3</span>
+            </button>
+            
+            <!-- Profile image in mobile navbar -->
+            <div class="mobile-profile-container">
+              <div class="relative">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+                     alt="User" 
+                     class="rounded-full border-2 border-tc w-8 h-8 object-cover"
+                     onerror="this.style.display='none'; document.getElementById('mobile-navbar-avatar-fallback').style.display='flex';">
+                <div id="mobile-navbar-avatar-fallback" class="avatar-placeholder rounded-full border-2 border-tc w-8 h-8 hidden text-xs">
+                  JD
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Top Navbar -->
+      <div class="hidden lg:flex justify-between items-center mb-8">
+        <div class="flex items-center">
+          <button class="mobile-menu-btn mr-4 glass-effect p-3 rounded-xl transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100 lg:hidden" id="open-sidebar-desktop" title="Open sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="page-title">
+            <h1 class="text-3xl font-bold font-serif text-gray-800 dark:text-gray-100 elegant-underline inline-block">Subscription</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Manage your plan, billing, and usage</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button id="theme-toggle" class="glass-effect p-3 rounded-xl transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">🌙</button>
+          <button class="relative glass-effect p-3 rounded-xl transition-all duration-300 hover:shadow-lg text-gray-800 dark:text-gray-100">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">3</span>
+          </button>
+          <div class="flex items-center space-x-3 glass-effect p-2 rounded-xl">
+            <!-- Profile image in top navbar with fallback -->
+            <div class="relative">
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+                   alt="User" 
+                   class="rounded-full border-2 border-tc w-10 h-10 object-cover"
+                   onerror="this.style.display='none'; document.getElementById('navbar-avatar-fallback').style.display='flex';">
+              <div id="navbar-avatar-fallback" class="avatar-placeholder rounded-full border-2 border-tc w-10 h-10 hidden">
+                JD
+              </div>
+            </div>
+            <div class="hidden md:block">
+              <p class="font-medium text-gray-800 dark:text-gray-100">John Doe</p>
+              <p class="text-xs text-gray-600 dark:text-gray-400">Admin</p>
+            </div>
+            <!-- Logout Button in Top Navbar (Mobile) -->
+            <button id="logout-btn-navbar" class="md:hidden text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors" title="Logout">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Plan Overview -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6 lg:mb-8">
+        <!-- Current Plan Card -->
+        <div class="lg:col-span-2 enhanced-card p-4 lg:p-6 fade-in">
+          <div class="flex justify-between items-center mb-4 lg:mb-6">
+            <h2 class="text-lg lg:text-xl font-semibold font-serif text-gray-800 dark:text-gray-100">Current Plan</h2>
+            <span class="px-2 lg:px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs lg:text-sm font-medium dark:bg-green-900/30 dark:text-green-300">Active</span>
+          </div>
+          <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-4 lg:mb-6">
+            <div>
+              <p class="gradient-text font-bold text-xl lg:text-2xl">Professional Plan</p>
+              <p class="text-gray-500 dark:text-gray-400 text-sm lg:text-base">Next Billing: 30 Nov 2025</p>
+            </div>
+            <div class="mt-4 lg:mt-0">
+              <button id="manage-subscription-btn" class="btn-premium px-3 lg:px-4 py-2 rounded-lg text-white font-medium text-sm lg:text-base">Manage Subscription</button>
+            </div>
+          </div>
+          
+          <div class="mb-4 lg:mb-6">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-600 dark:text-gray-400">Plan Usage</span>
+              <span class="font-medium text-gray-800 dark:text-gray-100">80% used</span>
+            </div>
+            <div class="progress-container">
+              <div class="progress-fill" style="width: 80%"></div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <span>25 days remaining</span>
+              <span>42 of 50 residents</span>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+            <div class="p-3 lg:p-4 bg-tc/5 rounded-xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Monthly Cost</p>
+              <p class="text-lg lg:text-xl font-bold text-gray-800 dark:text-gray-100">$99</p>
+            </div>
+            <div class="p-3 lg:p-4 bg-tc/5 rounded-xl">
+              <p class="text-sm text-gray-600 dark:text-gray-400">Next Invoice</p>
+              <p class="text-lg lg:text-xl font-bold text-gray-800 dark:text-gray-100">$99</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing Information -->
+        <div class="enhanced-card p-4 lg:p-6 fade-in">
+          <h2 class="text-lg lg:text-xl font-semibold font-serif mb-4 lg:mb-6 text-gray-800 dark:text-gray-100">Billing Information</h2>
+          <div class="space-y-3 lg:space-y-4">
+            <div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Payment Method</p>
+              <div class="flex items-center mt-1">
+                <i class="fab fa-cc-visa text-xl lg:text-2xl text-blue-600 mr-2"></i>
+                <span class="font-medium text-sm lg:text-base text-gray-800 dark:text-gray-100">Visa ending in 4242</span>
+              </div>
+            </div>
+            
+            <div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Billing Address</p>
+              <p class="font-medium text-sm lg:text-base text-gray-800 dark:text-gray-100 mt-1">123 Business St, Suite 100<br>San Francisco, CA 94107</p>
+            </div>
+            
+            <div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Billing Contact</p>
+              <p class="font-medium text-sm lg:text-base text-gray-800 dark:text-gray-100 mt-1">billing@techlycare.com</p>
+            </div>
+            
+            <button class="w-full mt-3 lg:mt-4 py-2 rounded-lg border border-tc text-tc font-medium hover:bg-tc hover:text-white transition-all duration-300 text-sm lg:text-base">
+              Update Billing Info
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plan Comparison -->
+      <div class="mb-6 lg:mb-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 lg:mb-6">
+          <h2 class="text-xl lg:text-2xl font-bold font-serif text-gray-800 dark:text-gray-100 mb-3 sm:mb-0">Available Plans</h2>
+          <div class="billing-toggle">
+            <span class="billing-option active" data-period="monthly">Monthly</span>
+            <span class="billing-option" data-period="yearly">Yearly (Save 20%)</span>
+          </div>
+        </div>
+
+        <!-- Plan Comparison Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 fade-in">
+          <!-- Essential -->
+          <div class="enhanced-card p-4 lg:p-6 transition-all duration-300">
+            <div class="flex justify-between items-start mb-3 lg:mb-4">
+              <h3 class="text-base lg:text-lg font-bold text-gray-800 dark:text-gray-100">Essential Plan</h3>
+              <span class="text-xs premium-badge px-2 py-1 rounded-full font-medium">BASIC</span>
+            </div>
+            <p class="text-tc dark:text-tc-400 font-semibold text-xl lg:text-2xl mb-3 lg:mb-4">$49<span class="text-sm text-gray-500 font-normal">/mo</span></p>
+            <ul class="space-y-2 mb-4 lg:mb-6">
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>Up to 10 residents</span>
+              </li>
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>Dashboard & Reports</span>
+              </li>
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>Basic support</span>
+              </li>
+              <li class="flex items-center text-sm text-gray-400">
+                <i class="fas fa-times feature-cross mr-2"></i>
+                <span>Advanced financial tracking</span>
+              </li>
+            </ul>
+            <button class="w-full py-2 lg:py-3 rounded-lg btn-premium text-white font-medium text-sm lg:text-base hover:shadow-lg transition-all duration-300">Select Plan</button>
+          </div>
+
+          <!-- Professional - Current Plan -->
+          <div class="enhanced-card p-4 lg:p-6 border-2 border-tc relative overflow-visible plan-highlight">
+            <!-- Current Plan Banner -->
+            <div class="current-plan-banner">
+            </div>
+            <div class="flex justify-between items-start mb-3 lg:mb-4">
+              <h3 class="text-base lg:text-lg font-bold text-gray-800 dark:text-gray-100">Professional Plan</h3>
+              <span class="text-xs bg-tc text-white px-2 py-1 rounded-full font-medium">POPULAR</span>
+            </div>
+            <p class="text-tc dark:text-tc-400 font-semibold text-xl lg:text-2xl mb-3 lg:mb-4">$99<span class="text-sm text-gray-500 font-normal">/mo</span></p>
+            <ul class="space-y-2 mb-4 lg:mb-6">
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>Up to 50 residents</span>
+              </li>
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>All Essential features</span>
+              </li>
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>Accounts & Finances</span>
+              </li>
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>Priority support</span>
+              </li>
+            </ul>
+            <button class="w-full py-2 lg:py-3 rounded-lg btn-premium text-white font-medium text-sm lg:text-base hover:shadow-lg transition-all duration-300">Current Plan</button>
+          </div>
+
+          <!-- Enterprise -->
+          <div class="enhanced-card p-4 lg:p-6 transition-all duration-300">
+            <div class="flex justify-between items-start mb-3 lg:mb-4">
+              <h3 class="text-base lg:text-lg font-bold text-gray-800 dark:text-gray-100">Enterprise Plan</h3>
+              <span class="text-xs bg-purple-500 text-white px-2 py-1 rounded-full font-medium">PREMIUM</span>
+            </div>
+            <p class="text-tc dark:text-tc-400 font-semibold text-xl lg:text-2xl mb-3 lg:mb-4">$199<span class="text-sm text-gray-500 font-normal">/mo</span></p>
+            <ul class="space-y-2 mb-4 lg:mb-6">
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>Unlimited residents</span>
+              </li>
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>All Professional features</span>
+              </li>
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>Petty cash management</span>
+              </li>
+              <li class="flex items-center text-sm text-gray-800 dark:text-gray-100">
+                <i class="fas fa-check feature-check mr-2"></i>
+                <span>Dedicated account manager</span>
+              </li>
+            </ul>
+            <button class="w-full py-2 lg:py-3 rounded-lg btn-premium text-white font-medium text-sm lg:text-base hover:shadow-lg transition-all duration-300">Upgrade</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Usage Statistics & Billing History -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+        <!-- Usage Statistics -->
+        <div class="enhanced-card p-4 lg:p-6 fade-in">
+          <h2 class="text-lg lg:text-xl font-semibold font-serif mb-4 lg:mb-6 text-gray-800 dark:text-gray-100">Usage Statistics</h2>
+          <div class="space-y-3 lg:space-y-4">
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm text-gray-600 dark:text-gray-400">Resident Capacity</span>
+                <span class="text-sm font-medium text-gray-800 dark:text-gray-100">84%</span>
+              </div>
+              <div class="progress-container">
+                <div class="progress-fill" style="width: 84%"></div>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">42 of 50 residents</p>
+            </div>
+            
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm text-gray-600 dark:text-gray-400">Storage Usage</span>
+                <span class="text-sm font-medium text-gray-800 dark:text-gray-100">62%</span>
+              </div>
+              <div class="progress-container">
+                <div class="progress-fill" style="width: 62%"></div>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">6.2GB of 10GB used</p>
+            </div>
+            
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm text-gray-600 dark:text-gray-400">API Requests</span>
+                <span class="text-sm font-medium text-gray-800 dark:text-gray-100">45%</span>
+              </div>
+              <div class="progress-container">
+                <div class="progress-fill" style="width: 45%"></div>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">4,500 of 10,000 requests</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing History -->
+        <div class="enhanced-card p-4 lg:p-6 fade-in">
+          <h2 class="text-lg lg:text-xl font-semibold font-serif mb-4 lg:mb-6 text-gray-800 dark:text-gray-100">Billing History</h2>
+          <div class="space-y-3 lg:space-y-4">
+            <div class="flex justify-between items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
+              <div>
+                <p class="font-medium text-sm lg:text-base text-gray-800 dark:text-gray-100">October 2025</p>
+                <p class="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Paid on Oct 1, 2025</p>
+              </div>
+              <div class="text-right">
+                <p class="font-medium text-sm lg:text-base text-gray-800 dark:text-gray-100">$99.00</p>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs dark:bg-green-900/30 dark:text-green-300">Paid</span>
+              </div>
+            </div>
+            
+            <div class="flex justify-between items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
+              <div>
+                <p class="font-medium text-sm lg:text-base text-gray-800 dark:text-gray-100">September 2025</p>
+                <p class="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Paid on Sep 1, 2025</p>
+              </div>
+              <div class="text-right">
+                <p class="font-medium text-sm lg:text-base text-gray-800 dark:text-gray-100">$99.00</p>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs dark:bg-green-900/30 dark:text-green-300">Paid</span>
+              </div>
+            </div>
+            
+            <div class="flex justify-between items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
+              <div>
+                <p class="font-medium text-sm lg:text-base text-gray-800 dark:text-gray-100">August 2025</p>
+                <p class="text-xs lg:text-sm text-gray-500 dark:text-gray-400">Paid on Aug 1, 2025</p>
+              </div>
+              <div class="text-right">
+                <p class="font-medium text-sm lg:text-base text-gray-800 dark:text-gray-100">$99.00</p>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs dark:bg-green-900/30 dark:text-green-300">Paid</span>
+              </div>
+            </div>
+          </div>
+          <button class="w-full mt-4 lg:mt-6 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-medium hover:border-tc hover:text-tc transition-all duration-300 text-sm lg:text-base">
+            View Full History
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle functionality for both desktop and mobile
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+    
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      const newIcon = isDark ? '☀️' : '🌙';
+      
+      if (themeToggle) themeToggle.textContent = newIcon;
+      if (themeToggleMobile) themeToggleMobile.textContent = newIcon;
+    }
+    
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
+    
+    if (themeToggleMobile) {
+      themeToggleMobile.addEventListener('click', toggleTheme);
+    }
+
+    // Mobile sidebar functionality
+    const sidebar = document.getElementById('sidebar');
+    const openSidebarBtn = document.getElementById('open-sidebar');
+    const openSidebarDesktopBtn = document.getElementById('open-sidebar-desktop');
+    const closeSidebarBtn = document.getElementById('close-sidebar');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    
+    openSidebarBtn.addEventListener('click', function() {
+      sidebar.classList.add('active');
+      mobileMenuOverlay.classList.add('active');
+    });
+    
+    if (openSidebarDesktopBtn) {
+      openSidebarDesktopBtn.addEventListener('click', function() {
+        sidebar.classList.add('active');
+        mobileMenuOverlay.classList.add('active');
+      });
+    }
+    
+    closeSidebarBtn.addEventListener('click', function() {
+      sidebar.classList.remove('active');
+      mobileMenuOverlay.classList.remove('active');
+    });
+    
+    mobileMenuOverlay.addEventListener('click', function() {
+      sidebar.classList.remove('active');
+      mobileMenuOverlay.classList.remove('active');
+    });
+
+    // Logout functionality
+    const logoutModal = document.getElementById('logout-modal');
+    const logoutBtnSidebar = document.getElementById('logout-btn-sidebar');
+    const logoutBtnNavbar = document.getElementById('logout-btn-navbar');
+    const cancelLogout = document.getElementById('cancel-logout');
+    const confirmLogout = document.getElementById('confirm-logout');
+    
+    // Show logout modal
+    function showLogoutModal() {
+      logoutModal.classList.add('active');
+    }
+    
+    // Hide logout modal
+    function hideLogoutModal() {
+      logoutModal.classList.remove('active');
+    }
+    
+    // Logout action
+    function performLogout() {
+      // In a real application, you would redirect to logout URL or clear session
+      alert('Logging out... Redirecting to login page.');
+      // window.location.href = '/login'; // Uncomment this in a real application
+    }
+    
+    // Event listeners for logout buttons
+    logoutBtnSidebar.addEventListener('click', showLogoutModal);
+    if (logoutBtnNavbar) {
+      logoutBtnNavbar.addEventListener('click', showLogoutModal);
+    }
+    
+    // Event listeners for logout modal
+    cancelLogout.addEventListener('click', hideLogoutModal);
+    confirmLogout.addEventListener('click', performLogout);
+    
+    // Close modal when clicking outside
+    logoutModal.addEventListener('click', function(e) {
+      if (e.target === logoutModal) {
+        hideLogoutModal();
+      }
+    });
+
+    // Billing period toggle
+    const billingOptions = document.querySelectorAll('.billing-option');
+    billingOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        billingOptions.forEach(opt => opt.classList.remove('active'));
+        option.classList.add('active');
+        
+        // Update pricing based on selected period
+        const period = option.getAttribute('data-period');
+        updatePricing(period);
+      });
+    });
+
+    function updatePricing(period) {
+      const monthlyPrices = {
+        essential: 49,
+        professional: 99,
+        enterprise: 199
+      };
+      
+      const yearlyPrices = {
+        essential: 39,
+        professional: 79,
+        enterprise: 159
+      };
+      
+      const prices = period === 'monthly' ? monthlyPrices : yearlyPrices;
+      const suffix = period === 'monthly' ? '/mo' : '/yr';
+      
+      document.querySelectorAll('.enhanced-card').forEach(card => {
+        const planElement = card.querySelector('h3');
+        if (!planElement) return;
+        
+        const planName = planElement.textContent.toLowerCase();
+        let price = 0;
+        
+        if (planName.includes('essential')) price = prices.essential;
+        else if (planName.includes('professional')) price = prices.professional;
+        else if (planName.includes('enterprise')) price = prices.enterprise;
+        
+        const priceElement = card.querySelector('.text-xl, .text-2xl');
+        if (priceElement) {
+          priceElement.innerHTML = `$${price}<span class="text-sm text-gray-500 font-normal">${suffix}</span>`;
+        }
+      });
+    }
+
+    // Plan selection
+    document.querySelectorAll('.enhanced-card button').forEach(button => {
+      button.addEventListener('click', function() {
+        if (this.textContent === 'Current Plan') return;
+        
+        const card = this.closest('.enhanced-card');
+        const planName = card.querySelector('h3').textContent;
+        
+        if (confirm(`Are you sure you want to switch to the ${planName}?`)) {
+          // In a real app, this would make an API call to change the plan
+          alert(`Successfully switched to ${planName}!`);
+        }
+      });
+    });
+
+    // Initialize animations
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add fade-in animation to elements
+      const fadeElements = document.querySelectorAll('.fade-in');
+      fadeElements.forEach(el => {
+        el.style.animationDelay = el.style.animationDelay || '0s';
+      });
+    });
+
+    // Image error handling - if all external images fail, show fallback avatars
+    window.addEventListener('load', function() {
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        if (!img.complete || img.naturalHeight === 0) {
+          // Image failed to load
+          const fallbackId = img.getAttribute('onerror').match(/document\.getElementById\('([^']+)'\)/)[1];
+          img.style.display = 'none';
+          document.getElementById(fallbackId).style.display = 'flex';
+        }
+      });
+    });
+  </script>
+</body> 
+</html>
